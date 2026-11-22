@@ -70,7 +70,6 @@ let onlineCode = null;
 let onlineBusy = false;
 let onlineActionInFlight = null;
 let onlineStatus = '';
-let pendingModeDecks = null;
 const openingAcknowledged = { local: state.phase !== 'initiative', online: true };
 try { lastBattleMode=localStorage.getItem('auradon.battle.mode')==='online'?'online':'local'; } catch {}
 
@@ -142,7 +141,7 @@ function phaseHint(active) {
   const visual = activeSpellVisual || spellVisualQueue[0];
   if (visual) return `${state.players[visual.casterIndex].name} · ${SPELL_CATALOG[visual.spellId]?.name || ({enhancement:'Enhancement',aura:'Aura','golem-transform':'Golem transformation','golem-revert':'Return to wizard','golem-strike':'Golem strike'}[visual.kind]||'Spell')} is resolving…`;
   if (state.status === 'finished') return `${state.players[state.winner].name} wins the duel!`;
-  if(state.phase==='setup')return 'Build a Fire, Water or Earth deck, then choose both wizards before battle.';
+  if(state.phase==='setup')return 'Choose Fire, Water or Earth for both wizards before battle.';
   if(state.phase==='initiative')return isOnlineBattle()
     ? onlineBusy?'Sending your opening roll…':state.initiative.rolls[onlinePlayerIndex]===null?'Roll your opening die. The higher roll goes first.':'Your opening die is rolled. Waiting for the other wizard.'
     : 'Both wizards roll one die to decide who goes first.';
@@ -800,7 +799,7 @@ function restartGame() {
   const enterAfter=shouldEnterAfterRestart;
   shouldEnterAfterRestart=false;
   openingAcknowledged.local=false;
-  update(createLocalGame(decks,selectedElements),'A new duel has begun with your saved decks. Roll to decide who starts.');
+  update(createLocalGame(decks,selectedElements),'A new duel has begun. Roll to decide who starts.');
   if(enterAfter)enterBattle();
 }
 document.querySelector('#confirm-restart').addEventListener('click',restartGame);
@@ -833,16 +832,15 @@ document.addEventListener('pointerdown',event=>{
 window.addEventListener('scroll',positionEmberChoice,true);
 window.visualViewport?.addEventListener('resize',positionEmberChoice);
 window.visualViewport?.addEventListener('scroll',positionEmberChoice);
-const hub=createHub({root:document.querySelector('#hub'),assets:ASSETS,onInspectSpell:showSlab,onMultiplayer:()=>openOnlineLobby(),onAccount:()=>openAccountScreen(),onSaveLocal:data=>{
+const hub=createHub({root:document.querySelector('#hub'),assets:ASSETS,onMultiplayer:()=>openOnlineLobby(),onAccount:()=>openAccountScreen(),onSaveLocal:data=>{
   if(!accounts?.hasSession())return;
   const username=accounts.getSession()?.account?.username;
   hub.setAccountStatus({username,state:'syncing',message:'Saving to your account…'});
   accounts.save(data).catch(error=>hub.setAccountStatus({username,state:'offline',message:error?.message||'Saved on this device. Cloud sync will need a retry.'}));
 },onBattle:({decks,forceNew=false,selectedElements,element,profile}={})=>{
-  pendingModeDecks=decks||hub.getSavedDecks();
   pendingModeElement=element||profile?.element||hub.getProfile().element||'fire';
-  restoreLocalBattle(getDeckSpellbook(pendingModeDecks.fire));
-  if(forceNew&&selectedElements){const chosenDecks=pendingModeDecks;pendingModeDecks=null;requestNewBattle(chosenDecks,true,selectedElements);return;}
+  restoreLocalBattle(ACTIVE_SPELLBOOK_ID);
+  if(forceNew&&selectedElements){requestNewBattle(decks,true,selectedElements);return;}
   document.querySelector('#resume-local').hidden=localState.status!=='playing'||localState.phase==='setup';
   document.querySelector('#battle-mode-title').textContent=`${getSpellbook(getGameSpellbook(localState)).label} · How will you battle?`;
   document.querySelector('#resume-local-detail').textContent=`${getSpellbook(getGameSpellbook(localState)).label} · Round ${localState.round}. Keep the current hands and progress. Turn draws and refreshes draw up to ${HAND_LIMIT} while your tower has slabs.`;
@@ -894,7 +892,7 @@ accounts=createAccounts({
     hub.clearAccountData();
     hub.setAccountStatus({state:'guest',message:'Playing locally on this device.'});
   },
-  onExit:details=>leaveBattle(details?.screen==='deck'?'deck':'home'),
+  onExit:details=>leaveBattle(details?.screen==='dons'?'dons':'home'),
   onStatus:(message,details={})=>hub.setAccountStatus({username:details.username,state:details.busy?'syncing':details.unsynced||details.kind==='error'?'offline':details.signedIn?'synced':'guest',message}),
 });
 function discardOnlineIdentity(){
@@ -1004,11 +1002,11 @@ function leaveBattle(screen='home',options={}){
   document.querySelectorAll('dialog[open]').forEach(dialog=>dialog.close());
   restoreLocalBattle();multiplayer?.hide();accounts?.hide();battleView.hidden=true;hub.show(screen,options);
 }
-function requestNewBattle(decks=hub.getSavedDecks(getGameSpellbook(state)),enterAfter=false,selectedElements=null){
+function requestNewBattle(decks,enterAfter=false,selectedElements=null){
   if(isOnlineBattle())return;
   if(!selectedElements){openBattleChooser(getPlayerSchool(state.players[0]));return;}
-  restoreLocalBattle(getDeckSpellbook(decks[selectedElements[0]]));
   if(!localDecksReady(decks,selectedElements)){openBattleChooser(selectedElements[0]);return;}
+  restoreLocalBattle(getDeckSpellbook(decks[selectedElements[0]]));
   if(isUntouchedBattle()||state.status==='finished'){
     openingAcknowledged.local=false;
     update(createLocalGame(decks,selectedElements));
@@ -1025,12 +1023,11 @@ document.querySelector('#battle-online-lobby').addEventListener('click',openOnli
 document.querySelector('#victory-online').addEventListener('click',()=>{multiplayer.leave();openOnlineLobby();});
 document.querySelector('#choose-local').addEventListener('click',()=>{
   document.querySelector('#battle-mode').close();restoreLocalBattle();
-  pendingModeDecks=null;
   openBattleChooser(pendingModeElement);
 });
 document.querySelector('#resume-local').addEventListener('click',()=>{
   document.querySelector('#battle-mode').close();restoreLocalBattle();
-  pendingModeDecks=null;enterBattle();
+  enterBattle();
 });
 document.querySelector('#choose-online').addEventListener('click',openOnlineLobby);
 document.querySelector('#resume-online').addEventListener('click',()=>{
@@ -1048,6 +1045,7 @@ function syncAppRoute(){
   if(storybookRoute){leaveBattle('storybook',{districtId:storybookRoute.districtId,history:false});return;}
   if(screen==='account'){openAccountScreen();return;}
   if(screen==='online'){openOnlineLobby();return;}
+  if(screen==='deck'){history.replaceState(null,'','#dons');leaveBattle('dons',{history:false});return;}
   if(screen==='battle'){
     if(lastBattleMode==='online'){
       const session=multiplayer.getSession();
@@ -1056,7 +1054,7 @@ function syncAppRoute(){
     }else{restoreLocalBattle(hub.getSelectedSpellbookId());enterBattle();}
     return;
   }
-  leaveBattle(['title','home','character','friends','deck','battle-setup'].includes(screen)?screen:'title');
+  leaveBattle(['title','home','character','friends','dons','battle-setup'].includes(screen)?screen:'title');
 }
 window.addEventListener('hashchange',syncAppRoute);
 window.addEventListener('popstate',syncAppRoute);

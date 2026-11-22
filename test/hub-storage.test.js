@@ -414,7 +414,7 @@ test('guest and different account owners retain independent spellbook-two decks 
   assert.equal(signedOut.selectedSpellbookId, SPELLBOOK_2);
 });
 
-test('legacy originals remain archived while active drafts require review; invalid saves cannot overwrite valid decks', () => {
+test('legacy originals remain archived when battle uses starter decks; invalid saves cannot overwrite valid decks', () => {
   const disk = new BrowserStorage(), store = createHubStorage(disk);
   const legacy = snapshot('Original collection');
   store.save(legacy);
@@ -422,7 +422,7 @@ test('legacy originals remain archived while active drafts require review; inval
   assert.deepEqual(restored.savedDecks, legacy.savedDecks);
   assert.equal(restored.selectedSpellbookId, SPELLBOOK_2);
   assert.deepEqual(restored.spellbook2.savedDecks.fire.entries, []);
-  assert.match(restored.activeMigrationNotice, /Review/);
+  assert.match(restored.activeMigrationNotice, /starter decks/);
   const both = { ...legacy, selectedSpellbookId: SPELLBOOK_2, spellbook2: testingBook() };
   assert.equal(store.save(both), true);
   const before = disk.getItem(HUB_SAVE_KEY);

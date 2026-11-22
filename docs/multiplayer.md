@@ -1,6 +1,6 @@
 # Accounts and two-screen multiplayer setup
 
-Auradon supports shared-screen battles, guest room-code battles, and username/password accounts with saved decks. Every player gets the same map, profile, slab collection, filters, and deck editor. Signing in on another device loads that account's profile and saved Fire, Water and Earth decks; guest decks remain local to their device.
+Auradon supports shared-screen battles, guest room-code battles, and username/password accounts. Signing in on another device loads that account’s profile and saved Fire, Water, and Earth decks. Guest profiles and decks are stored in the browser.
 
 The server validates decks and moves, shuffles the cards, and rolls dice. Each phone receives only its own hand and public battle information. The other hand, draw order, private deck composition, and player tokens are not sent to that browser.
 
@@ -41,31 +41,30 @@ Both phones must be on the same network, the computer must remain awake, and its
 
 Use this locally served **HTTP** app on both phones. The HTTPS GitHub Pages site cannot call an HTTP Mac address because browsers block mixed HTTPS/HTTP requests. No account is required for guest room-code battles.
 
-The local address and GitHub Pages have separate browser storage. To reuse a deck from the website, open **Dons → Download deck** there, then open the local app's **Dons → Upload deck**, choose the JSON file, and press **Save deck**. Otherwise build and save a new deck of 1–30 slabs locally. Each phone needs the saved deck for the element it will play; it does not need decks for every element.
+The LAN address and GitHub Pages have separate browser storage. For the same saved account decks on both sites, sign into the same game server. Empty deck slots use the selected element’s 12-slab starter.
 
-On each phone, open **Battle → Play on two screens** to reach **Battle Portal**. Its **Game server address** normally fills with the local app's address, such as `http://192.168.1.20:8788`. If older saved settings show another address, replace it with the same local address on both phones. Enter a wizard name. One phone chooses Fire, Water or Earth and taps **Create battle →**; the other chooses its own element, enters the shared eight-character **Room code** and taps **Join →**. Each phone uses its selected element's saved deck. Both may choose the same element. Both players then complete their opening die rolls.
+On each phone, open **Battle → Play on two screens** to reach **Battle Portal**. Its **Game server address** normally fills with the local app's address, such as `http://192.168.1.20:8788`. If older saved settings show another address, replace it with the same local address on both phones. Enter a wizard name. One phone chooses Fire, Water or Earth and taps **Create battle →**; the other chooses its own element, enters the shared eight-character **Room code** and taps **Join →**. Each phone uses its selected element’s saved deck or starter. Both may choose the same element. Both players then complete their opening die rolls.
 
 ## Current named spellbook
 
-New rooms use the sole active collection: **Heatbox, Blaze, Charred Blade, Xineoph, Sunsetter, Anti-Furnace; Sea bolt, Swell, Carbonate, Pacific, Poseidon's Rift; OffoDefo, Bengal Shield, Earthbound, Merciful, Tectonic, Metamorphic; and Fortune, Misfortune, Twist**. The old Spellbook 1/2 selector is removed. Stable IDs retain the `spellbook-2` storage identity, with Fire-6 replacing Fire-5. Save a legal Fire, Water or Earth deck before creating or joining a room; old-collection rooms cannot be newly created through a stale client.
+New rooms use the sole active collection: **Heatbox, Blaze, Charred Blade, Xineoph, Sunsetter, Anti-Furnace; Sea bolt, Swell, Carbonate, Pacific, Poseidon's Rift; OffoDefo, Bengal Shield, Earthbound, Merciful, Tectonic, Metamorphic; and Fortune, Misfortune, Twist**. Stable IDs retain the `spellbook-2` storage identity, with Fire-6 replacing Fire-5.
 
-Guest and account saved data from earlier collections remains backed up. Existing current-book decks are preferred; former Fire-5 copies are replaced with Charred Blade for deck review. Retired cards are reported instead of silently becoming new spells. Historical paid casts and completed results are not replayed. An unsafe old testing duel containing Fire-5 is archived, and a new duel uses the reviewed saved deck.
+The game backs up earlier guest and account deck data and migrates compatible saved decks to the current spellbook. Fire-5 copies become Charred Blade in compatible decks. A former testing duel containing Fire-5 is archived to preserve its original cards and completed results.
 
 For this release, pull the latest source, run `npm run build:production`, and restart `npm run multiplayer`. Clients and servers must both use combat rules **`earth-golem-v3`** and save version **16**. Updating the website alone does not update a running game server; rebuild and restart that server before creating or joining a room. Existing rooms end on restart. The spellbook compatibility family remains `nov4-v2.1`, so saved Fire and Water decks remain available. Older account records gain empty Earth slots, and older clients that omit Earth when saving cannot erase a saved Earth deck. Earth-3 costs 2 Mana and gains 12 Shield on 7+ after its 5 damage. Earth-4 costs 4 Mana, always gains 3 Shield, and on a final 6+ after dice and Fate makes all damage received during the next opposing turn bypass its caster’s Shield and hit HP. The status lasts through opposing end-turn effects, then expires; it does not grant Golem protection or Mana. Other Mana costs, Fate, Enhancement and Aura retain their rules. Each held Ember adds 5% outgoing Fire damage, capped at 25%; the bank is consumed by outgoing Fire damage before new printed gains. Charred Blade, Sunsetter and Blaze have the revised effects below.
 
 ## Create an account and sync decks
 
 1. Open **Account** from the title or Character screen and use the same server address on both devices.
-2. Register a username and password. Usernames contain 3–24 letters, digits, underscores, or hyphens and are case insensitive. Passwords contain 10–128 characters. Registration imports that device's current saved profile and current-spellbook deck slots. An element slot may remain empty while you build its deck.
-3. On another device, sign in with the same credentials. The account's profile and saved decks load into the same UI and editor.
-4. Open **Dons**, build a Fire, Water or Earth deck of **1–30 slabs**, and press **Save deck**. **Upload deck** loads a compatible JSON decklist into the editor for review, and **Download deck** exports a legal nonempty deck. Valid saved decks and profile changes sync while signed in. Editor drafts remain on the device, and changing decks does not alter a match already in progress.
-5. Each friend creates their own account. Signing out returns to the device's guest profile/decks.
+2. Register a username and password. Usernames contain 3–24 letters, digits, underscores, or hyphens and are case insensitive. Passwords contain 10–128 characters. Registration carries over this device’s profile and compatible saved decks.
+3. On another device, sign in with the same credentials to load the account’s profile and saved decks. The room server supplies a starter for an empty element slot.
+4. Create an account for each player. Signing out brings back the device’s guest profile and its decks.
 
 The server stores salted password hashes and hashed 30-day session tokens, not plaintext passwords. The browser stores its private session token so it can reconnect; passwords are not saved in browser storage. Do not share account or room tokens. The short battle room code is the part intended to be shared.
 
 This beta has no email provider or automated password recovery. Choose credentials you can retain. Persistent account storage is required for accounts to survive hosting restarts or redeploys.
 
-Guest play remains available. Guest matches use this device's saved deck; signed-in matches use the corresponding account deck stored by the server. Both routes accept **1–30 slabs**, with no per-spell copy limit and one element plus Fate. Existing 30-slab decks remain valid. There are no generated starter decks or Neutral spells in the November 4 catalog. Empty drafts and account slots are allowed for editing, but a room seat requires a legal nonempty saved deck for its role.
+Guest rooms use the device’s compatible saved deck or the selected element’s starter. Signed-in rooms use the corresponding account deck or starter. Saved compositions can contain **1–30 slabs** of one element plus Fate, with unlimited copies per spell.
 
 ## Remote hosting with persistent accounts
 
@@ -108,9 +107,9 @@ Back up the data directory separately from the source repository. For a simple c
 
 ## Create and join a battle
 
-1. Sign in if you want account-backed decks, or continue as a guest. Build and save a legal deck for the element you will play. Shared-screen duels use the saved deck for each chosen element, including the same deck in a mirror match; each two-screen player only needs their own chosen element's saved deck.
+1. Sign in to use account decks, or continue as a guest. A compatible saved deck takes priority for each player’s selected element. The starter is ready when that slot is empty.
 2. Open **Battle → Play on two screens**, or **Friends → Create or join a battle**. In Battle Portal, both devices use the same **Game server address** and enter their wizard names.
-3. The host chooses Fire, Water or Earth and taps **Create battle →**. Share the eight-character **Room code**. The other player independently chooses Fire, Water or Earth, enters the code and taps **Join →**. Each uses their own selected school's saved deck; all pairings, including mirror matches, are allowed.
+3. The host chooses Fire, Water or Earth and taps **Create battle →**. Share the eight-character **Room code**. The other player independently chooses Fire, Water or Earth, enters the code and taps **Join →**. All pairings are allowed, including mirror matches.
 4. Each player rolls **one d6** to decide who starts. Higher goes first; ties reroll both. Fate and Loaded do not affect initiative.
 5. Each player starts with **up to five slabs**, limited by their deck's cards. The second player draws **one extra slab when their first own turn begins if a tower card is available**, up to the six-slab hand limit. If they already used Fate, this adds one to the remaining hand rather than filling it to six. Small decks may have no opening tower cards. Neither player gains the later-turn +2 mana on their opening turn; empty towers do not reshuffle or cause fatigue damage.
 6. Both wizards start at **100 HP** with **3 Mana**. Mana is capped at **10**, Shield at **30**, and Embers/Flow at **5**. After the opening turn, each wizard gains two Mana at the beginning of their own turn.
@@ -141,13 +140,13 @@ Account data and room data have different lifetimes:
 
 - **Accounts, saved decks, and account sessions** persist when the SQLite database file is retained. Signing in from another device loads the saved profile and decks.
 - **Active battle rooms** remain in memory and expire after six hours without authorized activity. Restarting, redeploying, or sleeping the server can end active matches even though accounts still exist.
-- **Guest profiles, local duels, and incomplete drafts** remain in browser storage on that device.
+- **Guest profiles, local duels, and saved guest decks** remain in browser storage on that device.
 
 Keep the same browser profile to reconnect to the same room seat. Clearing browser storage removes that device's room token; signing back into an account restores its decks, not a lost room seat. Normal and private windows do not share these tokens.
 
 The current combat save version is **16** with the November 4 catalog. Current-catalog versions **10–15** migrate. Version 15 retains decks, paid effects, Golem form and previously earned protection while receiving an inactive incoming-damage bypass status. Version 14 keeps its exact hands, decks and paid effects while receiving school and inactive Golem defaults. Version 13 retains hands, decks, Enhancement, Aura and counters; completed Enhancement outcomes keep their historical awards without replay or recalculation. An Enhancement saved before its first roll now gets the new post-roll Fate chain. Version 12 retains Enhancement with no active Aura; versions 10/11 start with 0% Enhancement and no Aura while their earlier Fate history is upgraded. Guest deck storage and deck-file compatibility are unchanged, including existing 30-slab decks. Old-catalog local duels and room sessions remain retired. Account migration retains credentials and archives replaced old deck data. Update both the interface and room server for Enhancement Fate support; redeploying the server replaces its in-memory rooms, so both players should reload and create a new room.
 
-Storybook shows only numbered **Mainquest** labels and assigned boss names per district, leaving unassigned bosses blank. Its beige pixel-paper view uses the slab cards' font style. Opening the general Storybook shows all districts collapsed; leaving it clears expanded entries. The same 14 grey map markers 1–12, 14 and 15 open only their own district. District 14 remains South Lake Union, and 15 combines Seattle Center with Queen Anne; 13 and 4.5 remain removed. The approved rough 8-bit Home UI is now live, with navy/indigo, wood and parchment artwork on its header, map frame, toolbar and navigation buttons. The map bitmap/geography, Storybook behavior and card/deck/combat/account functions are unchanged. The same static view is available to guests and signed-in players; GPS gating, quest completion, rewards and mini-map screens are not added. Friend lists, messaging, photo uploads, matchmaking and turn timeouts remain outside this release.
+Storybook shows only numbered **Mainquest** labels and assigned boss names per district, leaving unassigned bosses blank. Its beige pixel-paper view uses the slab cards' font style. Opening the general Storybook shows all districts collapsed; leaving it clears expanded entries. The same 14 grey map markers 1–12, 14 and 15 open only their own district. District 14 remains South Lake Union, and 15 combines Seattle Center with Queen Anne; 13 and 4.5 remain removed. The approved rough 8-bit Home UI is now live, with navy/indigo, wood and parchment artwork on its header, map frame, toolbar and navigation buttons. Guests and signed-in players can open **Dons** to browse the Rolodex. GPS gating, quest completion, rewards and mini-map screens are not added. Friend lists, messaging, photo uploads, matchmaking and turn timeouts remain outside this release.
 
 ## Troubleshooting
 
@@ -160,7 +159,7 @@ Storybook shows only numbered **Mainquest** labels and assigned boss names per d
 | Browser reports CORS/origin error | Add the exact frontend origin to `AURADON_ALLOWED_ORIGINS`, without `/Auradon/` or a trailing slash. |
 | Two test windows use the same room seat | Use separate browser profiles or one private window. |
 | A room expires but the account still works | Room memory was lost or expired. Create a new room; the account deck remains in SQLite. |
-| A deck update reports a conflict | Refresh the account's saved decks before retrying; another signed-in device may have saved a newer revision. |
+| Account sync reports a conflict | Check the saved versions shown in Account. Another signed-in device may have saved a newer revision. |
 | A move was stale | Let the client refresh the room, then choose the intended action again. |
 
 Resources: [Node.js downloads](https://nodejs.org/en/download), [Render Node hosting](https://render.com/docs/deploy-node-express-app), [Render persistent disks](https://render.com/docs/disks), and [Docker installation](https://docs.docker.com/get-started/get-docker/). TestFlight can connect to the same service later.

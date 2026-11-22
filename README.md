@@ -1,6 +1,6 @@
 # Auradon · Seattle spell slab prototype
 
-A mobile-first pixel-art game prototype with a title screen, a Seattle map preview, Character and Friends screens, a deck builder, and a two-player battle arena. Fire, Water and Earth can share one screen or use separate browsers connected to the room server. The current named spellbook contains **20 active slabs: six Fire, five Water, six Earth and three Fate**. Players build, save, upload and download decks of **1–30 slabs**, with unlimited copies per spell. Earlier collections remain archived for saved-data compatibility.
+A mobile-first pixel-art game with a Seattle map, a creature Rolodex, and a two-player battle arena. Fire, Water, and Earth wizards can battle on one screen or use separate browsers connected to a room server. The current spellbook contains 20 active slabs across Fire, Water, Earth, and Fate.
 
 [Open Auradon](https://carsahhex-byte.github.io/Auradon/#title) starts at the title screen. A new duel starts at **100 / 100 HP, 3 / 10 Mana, and 0 / 30 Shield**; the second number is each resource's maximum.
 
@@ -16,7 +16,7 @@ npm start
 The server listens on port **5173**. Set `PORT` to use another port. `npm run dev` starts the same development server; refresh the browser after editing files.
 
 ```sh
-npm test          # game-engine, deck-building, and spell-effect tests
+npm test          # game engine, deck validation, and spell-effect tests
 npm run build    # syntax validation and a static release in dist/
 npm run build:web # hosted review build, including optional galleries and experiments
 npm run build:production # game-only hosted release, with optimized artwork
@@ -24,27 +24,27 @@ npm run preview  # serve the built release on port 5173
 npm run multiplayer # serve the built app and room API on port 8788
 ```
 
-The frontend release can be hosted on any static web server, including a project subpath such as `/Auradon/`. Shared-screen saves and guest decks use this browser's local storage. Signing in syncs the same profile and saved Fire/Water/Earth deck slots through the account server, so another device can use the same deck editor and saved decks. Two-screen play sends game actions to the room server and stores a private room token on the device for reconnecting.
+The frontend can run on a static web server at a project path such as `/Auradon/`. The browser stores shared-screen duels and guest decks. Signing in syncs the account profile and saved Fire, Water, and Earth decks across devices. Two-screen play sends actions to the room server and stores a private room token for reconnecting.
 
-**Save deck works without an account.** Guest profiles, saved decks and drafts use Auradon-specific device storage shared by every Auradon update on the same origin. Compatible earlier saves and guest backup copies are restored when needed. Closing a regular tab or following a newer Auradon launch link keeps those decks. Use the same browser and device; Download deck provides a portable backup for another browser or device.
+Guest profiles, local duels, and existing guest decks share Auradon-specific storage across releases on the same browser and origin.
 
-For two phones on the same Wi-Fi, run `npm run build:web` followed by `npm run multiplayer`, then open `http://YOUR_MAC_WIFI_IP:8788/#title` in Safari on both phones. Find the Mac's address in **System Settings → Wi-Fi → Details → TCP/IP**. Guest play needs no account: save each phone's legal 1–30-slab role deck, then use **Battle → Play on two screens**, the same **Game server address**, and **Create battle →** / **Join →** with the eight-character room code. The locally served app uses separate deck storage from GitHub Pages; export existing decks with **Download deck**, then **Upload deck** and **Save deck** at the local address. Keep the Mac awake and server running. For remote players, deploy an HTTPS server. See [the complete multiplayer setup guide](docs/multiplayer.md) for commands and troubleshooting. GitHub Pages cannot run the room API or connect to an HTTP Mac from its HTTPS page.
+For two phones on the same Wi-Fi, run `npm run build:web` followed by `npm run multiplayer`. Open `http://YOUR_MAC_WIFI_IP:8788/#title` in Safari on both phones. Find the Mac's address in **System Settings → Wi-Fi → Details → TCP/IP**. Open **Battle → Play on two screens**, enter the same **Game server address**, and use **Create battle →** or **Join →** with the eight-character room code. Keep the Mac awake and the server running. Remote players need an HTTPS game server. See the [multiplayer setup guide](docs/multiplayer.md).
 
-## Screens and deck building
+## Screens and battles
 
 The title screen opens a Home map using the clean pixel-art Seattle landmark illustration, with draggable/zoomable city, water and islands. The approved **rough 8-bit Home UI** is now live: navy/indigo framing with wood and parchment details around the header, map, zoom toolbar and navigation buttons. **Fit / 1×** fills the map panel; the header, zoom toolbar and navigation dock stay outside the city. The same 14 grey district markers **1–12, 14 and 15** open **Storybook** with only that district expanded. Queen Anne is merged into **15, Seattle Center**; marker 13 and 4.5 are removed, and **14 is South Lake Union**. Storybook shows a minimal **Mainquest N** label and assigned boss name per district; unassigned bosses are left blank. Its beige pixel-paper theme uses the slab cards' font style. The general Storybook button above Character opens all districts collapsed, and leaving the book clears expanded entries. Markers open this view rather than district mini-maps. The red blinking dot remains a preview position; GPS gating, quest completion, rewards and photo uploads are not implemented. Home also links to Character, Dons, Friends and Battle. Character keeps a wizard name and Fire/Water/Earth choice and links to account sign-in. Friends provides room-code battles; friend lists, invitations and messaging remain later additions.
 
-Inside **Dons**, the sole current spellbook contains **Heatbox, Blaze, Charred Blade, Xineoph, Sunsetter and Anti-Furnace; Sea bolt, Swell, Carbonate, Pacific and Poseidon's Rift; OffoDefo, Bengal Shield, Earthbound, Merciful, Tectonic and Metamorphic; and Fortune, Misfortune and Twist**. Charred Blade uses Fire-6 and replaces Fire-5 from the former testing collection. Stable IDs are retained; Poseidon's Rift now costs 6 Mana. Each held Ember grants +5% Fire damage, up to +25%, then is consumed by the next outgoing damaging Fire spell before that spell grants new Embers. Charred Blade now deals 20 damage, or 30 and gains 2 Embers on 7+; Sunsetter deals 55 damage, or 65 on 8+, without an Ember-spending cost. Blaze gains Mana on 6+. Xineoph retains its phoenix card artwork; its casting animation now uses the original Fire wizard’s size and deep-red colors, with orange formation effects matching the original orange flight and impact; Charred Blade keeps its rough pixel-art flaming sword. The old Spellbook 1/2 switch is removed; the former testing collection is now the active book. Existing current decks are preferred, while earlier decks are retained for backup and review. **The 5%-per-Ember damage bonus is consumed on a damaging Fire spell, not at round end.**
+**Dons** opens the Rolodex at `#dons`. Scroll the vertical list of thumbnails and choose any entry from **Aur-1** through **Aur-11**. The selected creature appears in the large panel above the list. Each approved sprite uses at most 16 colors and has a transparent background.
 
-The deck builder places a scrollable selected-deck list in the upper half and a slab collection in the lower half, with four cards per collection row. Check a slab to add its first copy, use the quantity controls to add or remove further copies, and uncheck it to remove all copies. Filters cover All, Fire, Water, Earth, Fate, and slabs currently in the deck. The collection shows only the current named spellbook’s slabs; only those eligible for the chosen main element can be added.
+The current spellbook contains **Heatbox, Blaze, Charred Blade, Xineoph, Sunsetter, Anti-Furnace, Sea bolt, Swell, Carbonate, Pacific, Poseidon’s Rift, OffoDefo, Bengal Shield, Earthbound, Merciful, Tectonic, Metamorphic, Fortune, Misfortune, and Twist**. Spell Tower shows the deck in use during a battle.
 
-A playable saved deck contains **1–30 slabs**, with **no per-spell copy limit**, and chooses **one main element: Fire, Water or Earth**. Fate slabs are allowed with each element. Different main elements cannot be mixed, Neutral spells are absent from this catalog, and there are no category quotas or generated starter decks. Empty drafts remain editable but cannot be saved for battle. Fire, Water and Earth drafts and saved decks are retained separately in local browser storage; older collection data remains backed up. Signed-in saved decks also sync to that account on the server; an unused element slot may remain empty, and drafts stay on the device. Saving a deck does not alter an ongoing duel; starting a fresh duel uses the saved compositions. Shared-screen play requires both saved decks; each two-screen player needs a legal saved deck for their chosen role. The 30-slab maximum remains; older compositions containing retired cards require review. **Upload deck** validates a versioned JSON file and loads a draft for review. **Download deck** exports a legal nonempty deck; **Save deck** commits it, and **Save & battle** saves it before opening battle choices. See [deck format and construction rules](docs/decklists.md).
+Choose Fire, Water, or Earth for each player when starting a battle. Each seat uses its compatible saved deck or a 12-slab starter for an empty slot. The starter is assigned for the match and the saved slot stays empty. Saved compositions can contain **1–30 slabs** of one element plus Fate, with unlimited copies per spell. See the [deck and spellbook reference](docs/decklists.md).
 
-The Battle shortcut offers shared-screen or two-screen play and provides a route back to Home. Guest two-screen matches use each device's saved deck; signed-in matches use the account's saved role deck from the current named spellbook. New rooms use only that active collection. Each player keeps a private hand, with server-validated actions, server-side shuffling and dice, and reconnecting by player token. Online rooms support Fire, Water, and Earth in any pairing and keep matches in server memory; a process restart or sleeping free instance can erase a room. Native iPhone packaging, signing, and TestFlight distribution remain a later step.
+The Battle shortcut offers shared-screen and two-screen play. Guest rooms use each device’s saved deck or starter. Signed-in rooms use the account’s saved deck or the server’s starter for the selected element. Each player has a private hand and can reconnect by player token. The room server validates actions and handles shuffling and dice. Rooms are held in memory, so a server restart can end a match.
 
 ## Accounts and saved decks
 
-Open **Account** from the title or Character screen. Create a username/password account on your game server to import this device's current saved decks, or sign in to load that account's profile and decks. Every device uses the same UI and deck-construction rules. Valid deck/profile saves sync while signed in; unsaved drafts remain local. Guest decks remain available after signing out.
+Open **Account** from the title or Character screen. Create a username and password on your game server to carry over this device’s profile and compatible saved decks. Sign in to that account on another device to use the same profile and decks. Signing out brings back the guest profile and its decks.
 
 The server stores accounts, legal decks, salted password hashes, and hashed 30-day sessions in SQLite. `npm run multiplayer` uses `data/auradon.sqlite` by default; set `AURADON_ACCOUNT_DB_PATH` to another persistent file. This is separate from room storage: accounts survive a server restart when the database file is retained, while active rooms still reset. Database files are excluded from Git and Docker build contexts. Remote sign-in needs HTTPS. The beta has no email service or automated password recovery.
 
@@ -52,9 +52,9 @@ For hosted accounts, choose persistent storage and back it up. An ephemeral free
 
 ## Hosting on Netlify
 
-Import `carsahhex-byte/Auradon` in Netlify and choose production branch **`main`**. The committed `netlify.toml` selects `npm run build:production`, publish directory `dist`, and Node 24. Open the generated site at `/#title`. Future pushes can deploy automatically without GitHub Pages. Follow the [step-by-step Netlify setup and deck-transfer guide](docs/netlify.md).
+Import `carsahhex-byte/Auradon` in Netlify and choose production branch **`main`**. The committed `netlify.toml` selects `npm run build:production`, publish directory `dist`, and Node 24. Open the generated site at `/#title`. Future pushes can deploy automatically without GitHub Pages. Follow the [step-by-step Netlify setup guide](docs/netlify.md).
 
-Netlify serves the static game; accounts and two-screen play still need the separate HTTPS game server. Add the final Netlify origin to that server’s `AURADON_ALLOWED_ORIGINS` and enter its address in the app. Fresh Netlify installs do not mistake the static host for the account/room API. Guest decks must be exported/imported when moving to a different website origin.
+Netlify serves the static game. Configure a separate HTTPS game server for accounts and two-screen play. Add the final Netlify origin to that server’s `AURADON_ALLOWED_ORIGINS` and enter the server address in the app. Guest saves belong to their original website origin. Account profiles and saved decks follow the account across sites that use the same game server.
 
 ## Hosting on GitHub Pages
 
@@ -95,7 +95,7 @@ shows its modifier beside the die symbol, still changing the Modified Roll.
 Full words remain available to accessibility tools and in Read Slab; the spell
 catalog and combat calculations are unchanged.
 
-The battle arena uses the forest's original **1024 × 1536 (2:3 portrait)** canvas. One uniform scale fits it to the available screen; the forest is never stretched or cropped to widen the board. On Mac screens, its top and bottom meet the viewport edges, with side gutters. Narrower screens fit the width and center the board vertically. The other screens use a mobile layout that adapts to the viewport, with independently scrolling deck panels.
+The battle arena uses the forest's original **1024 × 1536 (2:3 portrait)** canvas. One uniform scale fits it to the available screen; the forest is never stretched or cropped to widen the board. On Mac screens, its top and bottom meet the viewport edges, with side gutters. Narrower screens fit the width and center the board vertically. The other screens use a mobile layout that adapts to the viewport, with an independently scrolling Rolodex list.
 
 Battle wizards walk in from their seat's side after **Continue** in a new duel's opening dialog, then idle facing each other on the grass. Fire and Water retain their original directional entrance atlas; Earth retains its walk sheet. No keyboard controls are added. Resuming a duel starts them idle; reduced motion places them there immediately. Original source PNGs remain unmodified. The larger mage portraits remain on Character and handoff screens.
 
@@ -103,7 +103,7 @@ The approved [wisp-free idle animations](designs/idle-wisp-free-review/README.md
 
 The separate [Earth and Air preview pack](designs/earth-air-previews/README.md), emitted by a review build at `previews/earth-air/`, preserves the earlier walking, idle, casting and effect artwork with an offline viewer and ZIP. Earth is now playable; Air remains a preview. The archived gallery keeps its original assets independently of the current battle selections.
 
-The approved rough pixel interface now extends to the functional Deck, Character, Friends and battle-selection screens, with the supplied navigation-button states, parchment controls and navy stone details. Saved decks, filters, four-card collection rows and room-code actions remain interactive. Earth uses the simpler supplied green-and-gold stat frame; a matching Air frame is packaged for future use. Spell Tower and Discard Pile now show a tower and a tray of spent slabs, with live counts in their plaques.
+The Dons, Character, Friends, and battle-selection screens use pixel-art controls, parchment, and navy stone. Earth uses the supplied green-and-gold stat frame. Spell Tower and Discard Pile show a tower and a tray of spent slabs, with live counts in their plaques.
 
 Thirteen active elemental spells use their own approved effect sheets after Fate ends. Their existing caster poses remain anchored, including Earth in Golem form and either arena seat. The effects retain a one-second particle hold and the quick 210 ms hit flash. Shield follow-through belongs to the caster; conditional reward flourishes use the final Modified Roll. Each played Fate briefly displays its signed modifier and pixel symbol above the dice for 600 ms before the next response or resolution. Skips stay immediate. Merciful's successful stone fragments persist until the opponent's next turn actually ends, with restored active fragments shown after a reload. These visual callbacks never reapply combat effects.
 
@@ -150,7 +150,7 @@ Use **Larger view** for a larger, scrollable portrait board and **Fit screen** t
 - Pending spell or Enhancement dice, Fate decisions, and resolution block ending the turn. Spell Tower and discard counts track card movement; the played primary is discarded once. Enhancement uses no primary slab, but Fate played for it is discarded normally. Aura uses no slab. Local control changes use handoffs. Read Slab shows full text, and Spell Tower lists deck composition without exposing draw order.
 - Version **14** saves use the `nov4-v2.1` catalog and validate pending spell/Enhancement Fate chains, dice, stats, zones, Enhancement, Aura, turn allowances and refresh progress. Current-catalog versions **10–13** migrate. Version 13 retains hands, decks, banks, Aura and counters; already-awarded Enhancement outcomes keep their historical award and are not replayed or recalculated. A saved Enhancement awaiting its first roll now gets the new Fate chain after that roll. Version 12 retains Enhancement and starts with no active Aura; versions 10/11 start with 0% Enhancement and no Aura while their older Fate history is upgraded. Existing guest deck keys are retained with additional named-collection backups; older compositions containing retired cards require review. Old-catalog duels remain retired; old deck IDs are not reinterpreted as new cards, and account migration retains credentials while archiving replaced old deck data.
 
-## Spellbook and custom decks
+## Spellbook and saved decks
 
 `src/spells.js` retains historical definitions from the November 4 Master Spellbook and the user-added slabs for saved-data validation. `src/spellbooks.js` exposes only the current 20-slab collection. Heatbox/Blaze/Charred Blade/Xineoph/Sunsetter retain Fire-2/15/6/11/14; Sea bolt/Swell/Carbonate/Pacific/Poseidon's Rift retain Water-2/0/12/9/14. Effects execute in `src/effects.js`; combat timing lives in `src/game.js`.
 
@@ -158,9 +158,9 @@ Xineoph costs **2 Mana**, deals **10 damage**, gains **2 Embers**, and gains **1
 
 Anti-Furnace (`Fire-16`) costs **3 Mana** and deals **10 base damage**. On **7+**, it first removes up to **15 Shield**, then deals normal damage. If the special Shield hit removes nothing, it grants **2 Embers**; the ordinary Fire hit consumes old Ember damage bonuses before those new Embers are granted. Metamorphic (`Earth-6`) costs **4 Mana**. On **5+**, it grants Shield equal to **half the actual Shield plus HP damage received during the opponent’s most recent turn, rounded down**. It grants zero if the opponent used no damaging primary spell that turn. Normal Shield caps apply. The two new spells have no spell animation yet. Their cards use the classic matching Fire/green Earth frames, beige text panels and pixel icons.
 
-Compatible current-book saves refresh old card names while preserving paid costs, completed outcomes and historical logs. A former test duel containing Fire-5 is archived instead of substituting Fire-6 into a committed action. Earlier decks can be reviewed against the active pool; Fire-5 copies are replaced with Charred Blade in deck review, and retired cards are reported. The original data remains backed up. Fate retains its existing 0-Mana cost and post-roll response chain. Completed historical damage is preserved without replay. Pending Fire spells resolve once under the current rules. A pending old Sunsetter's reserved Embers are restored exactly once into its bank, then consumed by its damage bonus on resolution; completed old Sunsetter outcomes remain historical.
+Compatible current-book saves refresh old card names while preserving paid costs, completed outcomes and historical logs. A former test duel containing Fire-5 is archived instead of substituting Fire-6 into a committed action. Compatible earlier decks migrate to the active pool, including replacement of Fire-5 copies with Charred Blade. Legacy deck data remains backed up. Fate retains its existing 0-Mana cost and post-roll response chain. Completed historical damage is preserved without replay. Pending Fire spells resolve once under the current rules. A pending old Sunsetter's reserved Embers are restored exactly once into its bank, then consumed by its damage bonus on resolution; completed old Sunsetter outcomes remain historical.
 
-See [spell IDs, Mana costs, construction rules, and the JSON decklist format](docs/decklists.md).
+See the [spell IDs, Mana costs, and decklist format](docs/decklists.md).
 
 ## Current limits
 
@@ -175,28 +175,29 @@ The in-game settings/handbook describes the active rules and local two-player fl
 ## Project structure
 
 - `src/spells.js` — current master spell metadata, catalog version, and PDF source references.
-- `src/decks.js` — deck construction, empty/ready slot validation, JSON import/export, and the 30-slab total.
+- `src/decks.js` — saved-deck validation, battle starters, and portable deck format compatibility.
 - `src/effects.js` — executable Fire and Water effects, roll requirements, and Ember-spending choices.
 - `src/game.js` — pure game-state transitions, post-roll Fate/refresh phases, slab instances, and versioned save validation.
 - `src/main.js` — battle rendering, local/remote interactions, browser persistence, and hub integration.
 - `src/multiplayer.js` — room lobby, private player session, server actions, polling, and reconnecting.
 - `src/multiplayer.css` — mobile two-screen lobby layout.
 - `src/accounts.js` / `src/accounts.css` — account sign-in, saved-deck synchronization, and account-screen layout.
-- `src/hub.js` — title, Home, Character, Friends, and deck-builder screens with local profile/deck persistence.
-- `src/hub.css` — mobile hub layout, pixel-styled controls, and independently scrolling deck panels.
+- `src/hub.js` — hub navigation, battle setup, and local profile and deck persistence.
+- `src/hub.css` — mobile hub layout and pixel-styled controls.
+- `src/rolodex.js` / `src/rolodex.css` — creature portraits, thumbnail list, and Rolodex styling.
 - `src/style.css` — responsive arena and card styling.
 - `src/assets.js` — uploaded graphic mapping and rendering crop metadata.
 - `src/optimized-art.js` — generated filenames and integrity hashes for hosted artwork.
 - `src/hub-storage.js` — stable guest/device save keys, compatible recovery and account separation.
-- `public/graphics/` — unmodified uploaded PNG graphics.
+- `public/graphics/` — source PNGs, including the approved Rolodex sprites.
 - `public/optimized/` — pixel-identical, hashed WebP copies and generation manifest.
 - `public/art/` — earlier prototype art and the application favicon.
 - `test/game.test.js` — phase locks, refresh, conservation, drawing, damage, victory, and save tests.
-- `test/decks.test.js` — full-deck and draft validation, element restrictions, quantities, and the 30-slab total.
-- `docs/decklists.md` — current catalog reference, custom-deck construction, portable format, and combat rules.
+- `test/decks.test.js` — saved-deck validation, starter composition, and element restrictions.
+- `docs/decklists.md` — current catalog, battle deck rules, and portable format compatibility.
 - `docs/multiplayer.md` — two-device local setup, remote hosting resources, room flow, and troubleshooting.
 - `server/` — authoritative room server, private player views, SQLite accounts/decks/sessions, validation, and built-frontend serving.
 - `Dockerfile` — optional Node 24 container build for a room-server host.
 - `scripts/` — Node server, static build, GitHub Pages deployment, and optional artwork optimizer.
 
-Automated checks cover the current catalog, costs and thresholds, caps, Flow timing, optional and mandatory Ember spending, self-damage, open post-roll Fate chains and passes, Twist signs, Loaded timing, Enhancement attempts and consumption, Aura cost and owner-turn expiry, combined damage rounding, compact slab text, custom-deck validation and transfers, turn/refresh rules, card conservation, accounts, room privacy, and save compatibility. Browser checks exercise the rendered collection, deck workflow, battle controls, and responsive layout.
+Automated checks cover the current catalog, costs and thresholds, caps, Flow timing, optional and mandatory Ember spending, self-damage, open post-roll Fate chains and passes, Twist signs, Loaded timing, Enhancement attempts and consumption, Aura cost and owner-turn expiry, combined damage rounding, compact slab text, saved-deck validation and starter fallback, turn/refresh rules, card conservation, accounts, room privacy, and save compatibility. Browser checks exercise the Rolodex, battle setup, battle controls, and responsive layout.

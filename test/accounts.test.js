@@ -4,7 +4,8 @@ import { mkdtemp, readFile, stat, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { createMultiplayerServer } from '../server/room-server.js';
-import { normalizeDeck } from '../src/decks.js';
+import { createStarterDeck, getBattleDeck, normalizeDeck } from '../src/decks.js';
+import { ACTIVE_SPELLBOOK_ID } from '../src/spellbooks.js';
 import { SPELLBOOK_VERSION } from '../src/spells.js';
 import { DatabaseSync } from 'node:sqlite';
 
@@ -379,6 +380,27 @@ test('eligible legacy decks promote safely and production account rooms default 
   assert.equal(room.status, 201, room.data.error); assert.equal(room.data.spellbookId, 'spellbook-2');
   const archived = await api.request('/api/rooms', { method: 'POST', token: created.token, body: { element: 'fire', spellbookId: 'spellbook-1' } });
   assert.equal(archived.status, 400); assert.equal(archived.data.code, 'archived_spellbook');
+});
+
+test('fresh accounts can host and join with starters while saved slots stay empty', async t => {
+  const api = await service(t, { allowArchivedSpellbook: false });
+  const empty = Object.fromEntries(['fire', 'water', 'earth'].map(element => [element, createStarterDeck(element, ACTIVE_SPELLBOOK_ID)]));
+  const archived = Object.fromEntries(['fire', 'water', 'earth'].map(element => [element, createStarterDeck(element)]));
+  const host = await api.register({ ...registration('starter_host'), decks: archived, spellbook2Decks: empty });
+  const guest = await api.register({ ...registration('starter_guest'), decks: archived, spellbook2Decks: empty });
+  const room = await api.request('/api/rooms', { method: 'POST', token: host.token, body: { element: 'fire' } });
+  assert.equal(room.status, 201, room.data.error);
+  const joined = await api.request(`/api/rooms/${room.data.code}/join`, { method: 'POST', token: guest.token,
+    body: { element: 'earth', deck: { ...empty.earth, entries: [{ spellId: 'Earth-5', quantity: 12 }] } } });
+  assert.equal(joined.status, 200, joined.data.error);
+  assert.deepEqual(joined.data.state.players[1].deckDefinition, normalizeDeck(getBattleDeck(empty.earth, 'earth')));
+  const view = await api.request(`/api/rooms/${room.data.code}`, { token: room.data.token });
+  assert.deepEqual(view.data.state.players[0].deckDefinition, normalizeDeck(getBattleDeck(empty.fire, 'fire')));
+  for (const account of [host, guest]) {
+    const saved = await api.request('/api/accounts/me', { token: account.token });
+    assert.deepEqual(saved.data.account.spellbook2Decks, empty);
+    assert.equal(saved.data.account.revision, 0);
+  }
 });
 
 test('old active Fire-5 account decks become Charred Blade with original data archived on save', async t => {

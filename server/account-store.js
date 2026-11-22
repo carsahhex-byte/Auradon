@@ -49,7 +49,7 @@ function savedDeckSlots(value, spellbookId, existing) {
 }
 
 function savedData(value, existing) {
-  if (value?.spellbookVersion !== undefined && value.spellbookVersion !== SPELLBOOK_VERSION) fail(400, 'spellbook_changed', 'Update Auradon and build decks from the current spellbook.');
+  if (value?.spellbookVersion !== undefined && value.spellbookVersion !== SPELLBOOK_VERSION) fail(400, 'spellbook_changed', 'Update Auradon to use the current spellbook.');
   const profile = value?.profile;
   if (!record(profile) || typeof profile.name !== 'string' || !ELEMENTS.includes(profile.element)) fail(400, 'invalid_profile', 'Choose a wizard name and Fire, Water or Earth element.');
   const name = profile.name.replace(/[\u0000-\u001f\u007f]/g, '').trim();
@@ -145,7 +145,7 @@ export function createAccountStore({ dbPath = ':memory:', now = Date.now, sessio
       try {
         const result = migrateToActiveDeck(source);
         if (result.removed.length) {
-          messages.add('Your original decks remain backed up. Build and save current decks; retired cards have not been silently removed from a saved deck.');
+          messages.add('Your original decks remain backed up. Battles use starter decks for slots with retired cards.');
           return [element, emptySpellbookTwoDecks()[element]];
         }
         if (result.replacements.length) messages.add('Fire-5 was replaced with Charred Blade; its quantity was kept. Review its 5-Mana cost before battling.');
@@ -156,7 +156,7 @@ export function createAccountStore({ dbPath = ':memory:', now = Date.now, sessio
     return { id: row.id, username: row.username, profile: { name: row.name, element: row.element }, decks, spellbook2Decks, revision: row.revision,
       spellbookVersion: SPELLBOOK_VERSION, activeCatalogVersion: 'named-spellbook-v1',
       ...(activeMigrationNotice ? { activeMigrationNotice, migrationMessage: activeMigrationNotice }
-        : archived && Object.values(decks).some(deck => deck.entries.length === 0) ? { migrationMessage: 'The spellbook has changed. Previous decks were archived; build and save new decks of 1–30 slabs.' } : {}) };
+        : archived && Object.values(decks).some(deck => deck.entries.length === 0) ? { migrationMessage: 'The spellbook has changed. Previous decks were archived, and starter decks fill empty slots for battle.' } : {}) };
   }
   function rowForToken(token) {
     if (typeof token !== 'string' || !TOKEN.test(token)) fail(401, 'account_unauthorized', 'Log in to your Auradon account again.');

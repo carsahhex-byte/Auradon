@@ -78,7 +78,7 @@ function candidateFrom(value, key, priority) {
             candidate.spellbook2[field][element] = migrated.removed.length > 0 ? createStarterDeck(element, SPELLBOOK_2) : migrated.deck;
             if (migrated.removed.length > 0) candidate.spellbook2.drafts[element] = migrated.deck;
             if (migrated.replacements.length) candidate.activeMigrationNotice = 'Fire-5 was replaced with Charred Blade in your saved deck; its quantity was kept. Review its 5-Mana cost before battling.';
-            if (migrated.removed.length > 0) candidate.activeMigrationNotice = 'Your original deck was backed up. Review the available cards and save a new deck; retired cards were not silently removed from a saved battle deck.';
+            if (migrated.removed.length > 0) candidate.activeMigrationNotice = 'Your original deck was backed up because it contains retired cards. Battles use a starter deck for that slot.';
           } catch {}
         }
       }
@@ -116,7 +116,7 @@ function mergeCandidates(candidates, accountId = null) {
           const result = migrateToActiveDeck(state.savedDecks[element]);
           promoted = result.removed.length > 0 ? createStarterDeck(element, SPELLBOOK_2) : result.deck;
           promotedDraft = migrateToActiveDeck(state.drafts[element]).deck;
-          if (result.removed.length > 0) notices.add('Your original decks were backed up. Review the available-card drafts and save new decks; retired cards remain in the backup.');
+          if (result.removed.length > 0) notices.add('Your original decks were backed up because they contain retired cards. Battles use starter decks for those slots.');
           if (result.replacements.length) notices.add('Fire-5 was replaced with Charred Blade; its quantity was kept. Review its 5-Mana cost before battling.');
         } catch {}
       }

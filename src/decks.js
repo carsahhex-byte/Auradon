@@ -6,6 +6,13 @@ export { getDeckSpellbook };
 
 export const MAX_DECK_FILE_BYTES = 65536;
 
+const BATTLE_STARTER_COPIES = {
+  fire: { 'Fire-2': 2, 'Fire-15': 2, 'Fire-6': 1, 'Fire-11': 2, 'Fire-14': 1, 'Fire-16': 1 },
+  water: { 'Water-2': 2, 'Water-0': 2, 'Water-12': 2, 'Water-9': 2, 'Water-14': 1 },
+  earth: { 'Earth-1': 2, 'Earth-2': 2, 'Earth-3': 2, 'Earth-4': 1, 'Earth-5': 1, 'Earth-6': 1 },
+};
+const BATTLE_STARTER_FATE = { 'FAT-001': 1, 'FAT-002': 1, 'FAT-003': 1 };
+
 const isDeckRecord = value => value !== null && typeof value === 'object'
   && !Array.isArray(value)
   && [Object.prototype, null].includes(Object.getPrototypeOf(value));
@@ -67,7 +74,7 @@ export function getEligibleSpells(element, bookId = SPELLBOOK_1) {
   return getSpellbookSpells(bookId).filter(spell => isSpellEligibleForDeck(spell, element));
 }
 
-/** New collections start empty; players choose up to 30 slabs in the editor. */
+/** Default saved slots retain their empty structure for account and save compatibility. */
 export function createStarterDeck(element, bookId = SPELLBOOK_1) {
   requireDeckElement(element);
   if (!isSpellbookId(bookId)) throw new TypeError('Choose Spellbook 1 or Spellbook 2.');
@@ -99,6 +106,20 @@ export function normalizeDeckSlot(deck) {
   return deckShape(deck.element, orderDeckEntries(deck.entries), getDeckSpellbook(deck));
 }
 
+/** Resolve a battle deck without filling an empty slot or rewriting a saved deck. */
+export function getBattleDeck(deck, element) {
+  requireDeckElement(element);
+  if (deck != null) {
+    if (deck.element !== element || getDeckSpellbook(deck) !== ACTIVE_SPELLBOOK_ID || !validateDeckSlot(deck)) {
+      throw new TypeError('Choose a legal deck from the current spellbook for this element.');
+    }
+    if (deck.entries.length > 0) return deck;
+  }
+  const copies = { ...BATTLE_STARTER_COPIES[element], ...BATTLE_STARTER_FATE };
+  const entries = Object.entries(copies).map(([spellId, quantity]) => ({ spellId, quantity }));
+  return deckShape(element, entries, ACTIVE_SPELLBOOK_ID);
+}
+
 /** Portable deck files carry the spellbook version so old cards cannot be reinterpreted. */
 export function serializeDeck(deck) {
   const canonical = normalizeDeck(deck);
@@ -117,7 +138,7 @@ function parseDeckFile(text) {
   let data;
   try { data = JSON.parse(text); } catch { throw new TypeError('The file is not valid deck JSON.'); }
   if (!isDeckRecord(data) || data.format !== 'wizzy-deck' || data.version !== 1) {
-    throw new TypeError('Choose a deck exported from the spell workshop.');
+    throw new TypeError('Choose an exported deck file.');
   }
   if (data.spellbook !== SPELLBOOK_VERSION) {
     throw new TypeError('This deck belongs to a different spellbook. Rebuild it with the current slabs.');

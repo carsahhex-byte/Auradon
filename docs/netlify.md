@@ -30,11 +30,11 @@ For reviewing future work first, use a pull-request Deploy Preview or enable a s
 
 The game-only production build excludes the optional `previews/` and `prototypes/` directories; it retains the entire playable game and runtime artwork. It checks artwork integrity and emits content-hashed assets and modules. `netlify.toml` revalidates HTML and `build-info.json` while allowing long caching of hashed artwork.
 
-## Keep guest decks when changing addresses
+## Saves when changing addresses
 
-Browser storage belongs to each website origin. Before leaving the GitHub Pages address, open **Dons → Download deck** for each saved element deck you want to keep.
+Guest profiles, guest decks, and shared-screen duels belong to their original browser and website origin.
 
-On the Netlify site, open **Dons → Upload deck**, review the imported cards, and press **Save deck**. Retired cards are reported for review; Fire-5 copies map to Charred Blade. Existing downloads and the old site's data remain available. Saved duels and guest profile settings do not transfer automatically.
+Sign into the same game server from either site to use existing account decks. If an element has an empty slot, the game supplies its 12-slab starter.
 
 ## Accounts and two-phone battles
 
@@ -48,7 +48,7 @@ For accounts or two-phone play, deploy a separate Auradon HTTPS game server.
 
 Fresh `*.netlify.app` installs leave the server address unconfigured instead of trying to use Netlify as the room API. Explicit or previously saved server addresses still work. See [the server setup guide](multiplayer.md) for hosting and persistence.
 
-If switching later to a custom frontend domain, add that exact origin to the game server as well. Guest saves will again need export/import when the website origin changes.
+If you switch to a custom frontend domain, add that origin to the game server’s `AURADON_ALLOWED_ORIGINS`.
 
 ## Manual upload fallback
 

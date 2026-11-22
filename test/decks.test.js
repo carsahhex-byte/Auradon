@@ -6,12 +6,36 @@ import {
   getDeckSpellbook, getSpellbookSpells, isSpellbookId, ACTIVE_SPELLBOOK_ID, ACTIVE_SPELL_IDS, getActiveSpells,
 } from '../src/spellbooks.js';
 import {
-  MAX_DECK_FILE_BYTES, createStarterDeck, getEligibleSpells, getDeckValidation,
+  MAX_DECK_FILE_BYTES, createStarterDeck, getEligibleSpells, getDeckValidation, getBattleDeck,
   validateDeck, normalizeDeck, getDeckCount, setDeckQuantity, validateDeckSlot,
   normalizeDeckSlot, serializeDeck, parseDeckList, migrateToActiveDeck, parseDeckListForActive,
 } from '../src/decks.js';
 
 const legal = element => ({ element, entries: getEligibleSpells(element).slice(0, 10).map(card => ({ spellId: card.spellId, quantity: 3 })) });
+
+test('empty active slots use independent, playable starter decks without changing saved slots', () => {
+  for (const element of ['fire', 'water', 'earth']) {
+    const empty = createStarterDeck(element, ACTIVE_SPELLBOOK_ID);
+    const starter = getBattleDeck(empty, element);
+    const copy = getBattleDeck(undefined, element);
+    assert.deepEqual(starter, copy);
+    assert.notEqual(starter.entries, copy.entries);
+    assert.equal(getDeckSpellbook(starter), ACTIVE_SPELLBOOK_ID);
+    assert.deepEqual(getDeckValidation(starter), { valid: true, total: 12, errors: [] });
+    assert.deepEqual(new Set(starter.entries.map(entry => entry.spellId)), new Set(getEligibleSpells(element, ACTIVE_SPELLBOOK_ID).map(spell => spell.spellId)));
+    const availableWithStartingMana = starter.entries.filter(({ spellId }) => SPELL_CATALOG[spellId].category !== 'Fate' && SPELL_CATALOG[spellId].manaCost <= 3);
+    assert.ok(availableWithStartingMana.reduce((total, entry) => total + entry.quantity, 0) >= 6);
+    assert.deepEqual(starter.entries.filter(({ spellId }) => SPELL_CATALOG[spellId].category === 'Fate').map(entry => entry.quantity), [1, 1, 1]);
+    assert.deepEqual(empty.entries, []);
+    const saved = { ...empty, entries: [{ spellId: 'FAT-003', quantity: 3 }] };
+    assert.strictEqual(getBattleDeck(saved, element), saved);
+  }
+  const emptyFire = createStarterDeck('fire', ACTIVE_SPELLBOOK_ID);
+  assert.throws(() => getBattleDeck(emptyFire, 'water'), TypeError);
+  assert.throws(() => getBattleDeck(createStarterDeck('fire'), 'fire'), TypeError);
+  assert.throws(() => getBattleDeck({ ...emptyFire, entries: 'broken' }, 'fire'), TypeError);
+  assert.throws(() => getBattleDeck({ ...emptyFire, entries: [{ spellId: 'Water-0', quantity: 1 }] }, 'fire'), TypeError);
+});
 
 test('the sole active book has the requested names, stable IDs, current effects, costs and art', () => {
   const expected = {

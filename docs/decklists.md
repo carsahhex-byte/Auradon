@@ -39,15 +39,17 @@ The spellbook's original source is **Wizzy Master Spellbook Nov4.pdf**, Master S
 | Attack while building | Xineoph attacks, gains Embers and can recover Mana. | Pacific attacks and gains two total Flow, subject to the cap. |
 | Finisher | Sunsetter delivers a large base attack boosted by held Embers. | Poseidon's Rift uses established Flow and keeps it afterward. |
 
-## Build, save and transfer a deck
+## Decks in battle
 
-Open **Deck**, choose Fire, Water or Earth, and add slabs from the current collection. The selected list occupies the upper panel; the lower collection keeps four cards per row. Filters cover All, Fire, Water, Earth, Fate and **In Deck**.
+On the shared-screen battle chooser, select Fire, Water, or Earth independently for each player. In two-screen play, the host and guest each select an element when creating or joining a room.
 
-A playable deck has **1–30 total slabs**, with **unlimited copies per spell**, using one main element plus Fate. Different main elements cannot be mixed. There are no Neutral spells or mandatory category quotas. Empty drafts remain editable but are not playable.
+Each seat uses a compatible saved deck for its element when available. An empty slot uses the element’s 12-slab starter, with one copy each of Fortune, Misfortune, and Twist. A saved deck can contain **1–30 slabs** of one element plus Fate, with unlimited copies per spell.
 
-**Save deck** stores the legal composition; **Save & battle** saves it before starting a battle. Shared-screen play opens a wizard chooser for Player 1 and Player 2; each can select Fire, Water or Earth, including mirrors. Only the selected decks need to be saved. Each two-screen player independently selects a school and uses their saved deck for that school. Account saves sync through the game server; drafts remain on the device. Saving a composition never changes an ongoing duel.
+Account decks follow the account on the same game server. Guest decks are stored on the originating device and browser. A duel saves its own deck composition and resumes with the same slabs and progress.
 
-**Download deck** exports a legal nonempty deck. **Upload deck** loads a draft for review; press Save deck to use it. The file limit is 64 KB. Files keep stable IDs, rather than depending on display names:
+## Portable deck format
+
+The compatibility parser accepts version 1 decklists up to 64 KB. Files identify slabs by their stable IDs.
 
 ```json
 {
@@ -66,11 +68,11 @@ This example contains three Xineoph slabs. The compatibility family remains `nov
 
 ## Earlier decks and saves
 
-Existing current-collection decks are preferred. Fire-5 quantities in earlier testing decks are replaced with Fire-6 quantities for Charred Blade, with the change presented for review. A legacy original-collection deck can be reviewed against the current pool. Retired cards are identified, and the original data is preserved; they are not silently reinterpreted as unrelated new spells. Review and save the resulting draft before battle. Malformed files, unknown IDs, mixed elements and invalid quantities are rejected.
+Existing current-collection decks take priority over starters. The migration carries compatible earlier Fire-5 quantities forward as Fire-6 for Charred Blade. Earlier deck data is backed up when it contains retired cards. The portable parser rejects malformed files, unknown IDs, mixed elements, and invalid quantities.
 
-Old guest and account deck data remains backed up. The old collection is not exposed as an editable or playable second spellbook. Device storage remains scoped to the browser and website origin; moving to another origin requires a deck export/import or account sync.
+Auradon stores guest data by browser and website origin. For the same saved account deck across devices or sites, sign into the same game server.
 
-Compatible saved duels refresh exact old card names without refunding paid Mana, repeating effects, or rewriting completed historical results. Old log entries can retain their historical names; animation lookup recognizes both the former ID names, Coral Crash and current names. A former testing duel containing Fire-5 is archived rather than turning an already-committed Fire-5 into Charred Blade. Start a new duel with the reviewed deck in that case.
+Compatible saved duels refresh exact old card names without refunding paid Mana, repeating effects, or rewriting completed historical results. Old log entries can retain their historical names; animation lookup recognizes both the former ID names, Coral Crash and current names. A former testing duel containing Fire-5 is archived rather than turning an already-committed Fire-5 into Charred Blade. A fresh duel can use the compatible saved composition or the starter for an empty slot.
 
 ## Combat and presentation
 

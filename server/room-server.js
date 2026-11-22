@@ -8,9 +8,9 @@ import {
   toggleRefreshCard, confirmRefresh, cancelStagedAction, rollInitiative, OPENING_HAND_SIZE,
   activateEnhancement, rollEnhancement, activateAura, COMBAT_RULES_VERSION,
 } from '../src/game.js';
-import { normalizeDeck } from '../src/decks.js';
+import { getBattleDeck, normalizeDeck } from '../src/decks.js';
 import { SPELLBOOK_VERSION } from '../src/spells.js';
-import { SPELLBOOK_1, SPELLBOOK_2, getDeckSpellbook, isSpellbookId } from '../src/spellbooks.js';
+import { ACTIVE_SPELLBOOK_ID, SPELLBOOK_1, SPELLBOOK_2, getDeckSpellbook, isSpellbookId } from '../src/spellbooks.js';
 import { ELEMENTS, ELEMENT_INFO } from '../src/elements.js';
 import { BACKEND_SERVICE } from '../src/backend.js';
 import { createAccountStore, AccountError } from './account-store.js';
@@ -46,16 +46,17 @@ function playerName(value) {
 
 function requestedSpellbook(body, account, allowArchivedSpellbook = false) {
   const id = body.spellbookId ?? (account ? (allowArchivedSpellbook ? SPELLBOOK_1 : SPELLBOOK_2) : getDeckSpellbook(body.deck));
-  if (!allowArchivedSpellbook && id !== SPELLBOOK_2) fail(400, 'archived_spellbook', 'This collection is archived. Update Auradon and save a deck from the current spellbook.');
+  if (!allowArchivedSpellbook && id !== ACTIVE_SPELLBOOK_ID) fail(400, 'archived_spellbook', 'This collection is archived. Update Auradon to use the current spellbook.');
   if (!isSpellbookId(id)) fail(400, 'invalid_spellbook', 'Choose Spellbook 1 or Spellbook 2.');
   return id;
 }
 function accountDeck(account, element, spellbookId) {
   return spellbookId === SPELLBOOK_2 ? account.spellbook2Decks?.[element] : account.decks[element];
 }
-function playableDeck(value, element, spellbookId = getDeckSpellbook(value)) {
+function playableDeck(account, submittedDeck, element, spellbookId) {
   try {
-    const deck = normalizeDeck(value);
+    const savedDeck = account ? accountDeck(account, element, spellbookId) : submittedDeck;
+    const deck = normalizeDeck(account && spellbookId === ACTIVE_SPELLBOOK_ID ? getBattleDeck(savedDeck, element) : savedDeck);
     if (getDeckSpellbook(deck) !== spellbookId) throw new Error('Choose a deck from the selected spellbook.');
     if (deck.element !== element) throw new Error(`Choose a saved ${ELEMENT_INFO[element].name} deck for your selected element.`);
     return deck;
@@ -341,7 +342,7 @@ export function createMultiplayerServer(options = {}) {
         const account = optionalAccount(request);
         const name = account ? account.profile.name : playerName(body.name);
         const spellbookId = requestedSpellbook(body, account, allowArchivedSpellbook);
-        const deck = playableDeck(account ? accountDeck(account, body.element, spellbookId) : body.deck, body.element, spellbookId);
+        const deck = playableDeck(account, body.deck, body.element, spellbookId);
         if (rooms.size >= maxRooms) fail(503, 'rooms_full', 'The battle server is full. Please try again later.');
         const playerIndex = 0;
         const player = newPlayer(name, deck, account?.id);
@@ -368,8 +369,8 @@ export function createMultiplayerServer(options = {}) {
           const element = body.element ?? (account ? legacyJoiningElement(room) : body.deck?.element);
           if (!ELEMENTS.includes(element)) fail(400, 'invalid_element', 'Choose Fire, Water or Earth.');
           const spellbookId = requestedSpellbook(body, account, allowArchivedSpellbook);
-          if (spellbookId !== (room.spellbookId || SPELLBOOK_1)) fail(409, 'spellbook_mismatch', 'This room uses a different spellbook. Select its spellbook in Deck before joining.');
-          const player = newPlayer(account ? account.profile.name : playerName(body.name), playableDeck(account ? accountDeck(account, element, spellbookId) : body.deck, element, spellbookId), account?.id);
+          if (spellbookId !== (room.spellbookId || SPELLBOOK_1)) fail(409, 'spellbook_mismatch', 'This room uses a different spellbook. Start a new room with the current spellbook.');
+          const player = newPlayer(account ? account.profile.name : playerName(body.name), playableDeck(account, body.deck, element, spellbookId), account?.id);
           const nextPlayers = room.players.slice(); nextPlayers[playerIndex] = player.record;
           const state = makeMatch({ players: nextPlayers.map(entry => ({ element: entry.deck.element, deck: entry.deck })) });
           assertGame(state);
