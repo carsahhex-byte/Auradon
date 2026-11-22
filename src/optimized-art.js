@@ -35,6 +35,61 @@ export const OPTIMIZED_ART = {
     "sourceSha256": "2d749a7d66b18c4d3121f76b7009c8a9b9cb0d57da61cefe95efe44db52620c1",
     "optimizedSha256": "6348b152854f25159c80a7dab91ab5287d318534f2e1329256dda717fb0dd821"
   },
+  "aur1": {
+    "file": "aur1-aa4644cb9d35.webp",
+    "sourceSha256": "31233d7c157430bc4c33fd6e62aa39cc1e5e478d0810fb5832610bd176309ebe",
+    "optimizedSha256": "aa4644cb9d357f4ef3e622a50bc28737054049af79fcea41bd3fd06f8eb2fdfe"
+  },
+  "aur2": {
+    "file": "aur2-e160551ad5d4.webp",
+    "sourceSha256": "faf41069d0f74b3c37c70a8852a633a2a4dabdb3802fba8489a5c0f4c5a0020f",
+    "optimizedSha256": "e160551ad5d4d8bb372cbe591d0f67bc18cf6afaec5e96cf75b98d0e90c85141"
+  },
+  "aur3": {
+    "file": "aur3-8fc6e40bd494.webp",
+    "sourceSha256": "8b2e99a6c18a930985e7846d6b94a6cc5bd8487fce719a5527772e5b879b4861",
+    "optimizedSha256": "8fc6e40bd494f5d2ff3c28067bf44f97eafeb8cef9fcf0cec6c67fcee35f3c2b"
+  },
+  "aur4": {
+    "file": "aur4-804165b5088f.webp",
+    "sourceSha256": "9969694b0aa55c41a86202cc7a57c7637950880e2830ce1b9b379c91c5f7d62b",
+    "optimizedSha256": "804165b5088f1ab486e4ac91f72ddd4f9552f011f52e7a31183b083187cbad63"
+  },
+  "aur5": {
+    "file": "aur5-1f2062873432.webp",
+    "sourceSha256": "5d281597d6e5e1f1a43e0777fe938854d16bbd43f2b6f61c878f4d8005ea09a8",
+    "optimizedSha256": "1f2062873432843dc78b42927e1fe87504d975578f88cac2eca7ec416b35388f"
+  },
+  "aur6": {
+    "file": "aur6-809953ee316a.webp",
+    "sourceSha256": "ba84b0cdcb676dd23b22b1beaa42a9c634299bf1ad4870ed978bfdfe4457cdde",
+    "optimizedSha256": "809953ee316aad318ce57c18c606c1a2b6526efb1b10dbc2459f631082b63b84"
+  },
+  "aur7": {
+    "file": "aur7-77b19713e03d.webp",
+    "sourceSha256": "7f32e03470b02ce0bd123bdabace7bfca843c51b55f2d8048c8b6e33074e713d",
+    "optimizedSha256": "77b19713e03d4054b2699166aeb43857a123dcbdb568b35d1a6fe32ab7d090d8"
+  },
+  "aur8": {
+    "file": "aur8-aabc1735b46f.webp",
+    "sourceSha256": "97019ded18f733b1deaecf917a785b22a5fc5688bc8c87b0a2604ff946a43d92",
+    "optimizedSha256": "aabc1735b46f1f8393228a221413b4e3a753654a42018253000ae15837bcea1c"
+  },
+  "aur9": {
+    "file": "aur9-606143020b1c.webp",
+    "sourceSha256": "e6627c27735a5640ba3edf88d6652b3edcb651600568febbe00a02da9e9e771c",
+    "optimizedSha256": "606143020b1c696c7e16a3193c1879fead926d42317549b78f27989a4849b9cc"
+  },
+  "aur10": {
+    "file": "aur10-e74d1f77af04.webp",
+    "sourceSha256": "ae44ab586b6a014440729785286168bae2fe288917c193b560ba93559aebba57",
+    "optimizedSha256": "e74d1f77af0454852d647f8a9e9b76aa07215e1b920538814d361d5896ffc990"
+  },
+  "aur11": {
+    "file": "aur11-750d67673839.webp",
+    "sourceSha256": "1b4ebeba8adfa6b42bc32bebe3aef55a711dbce453039fe0bf00d43017771903",
+    "optimizedSha256": "750d67673839e83398c09c3c0532a6ed26075c42e0d8a5829b8c1c02b5139467"
+  },
   "fireSlabSheet": {
     "file": "fireSlabSheet-e353c368a94f.webp",
     "sourceSha256": "190e2c47f9ea679c9c4cab050c9f36310fba193b40f66db062ef98ff1e8ba4b4",
