@@ -28,19 +28,55 @@ The frontend can run on a static web server at a project path such as `/Auradon/
 
 Guest profiles, local duels, and existing guest decks share Auradon-specific storage across releases on the same browser and origin.
 
-For two phones on the same Wi-Fi, run `npm run build:web` followed by `npm run multiplayer`. Open `http://YOUR_MAC_WIFI_IP:8788/#title` in Safari on both phones. Find the Mac's address in **System Settings → Wi-Fi → Details → TCP/IP**. Open **Battle → Play on two screens**, enter the same **Game server address**, and use **Create battle →** or **Join →** with the eight-character room code. Keep the Mac awake and the server running. Remote players need an HTTPS game server. See the [multiplayer setup guide](docs/multiplayer.md).
+For two phones on the same Wi-Fi, run `npm run build:web` followed by `npm run multiplayer`. Open `http://YOUR_MAC_WIFI_IP:8788/#title` in Safari on both phones. Find the Mac's address in **System Settings → Wi-Fi → Details → TCP/IP**. Open the room lobby at `#online`, enter the same **Game server address**, and use **Create battle →** or **Join →** with the eight-character room code. Keep the Mac awake and the server running. Remote players need an HTTPS game server. See the [multiplayer setup guide](docs/multiplayer.md).
 
 ## Screens and battles
 
-The title screen opens a Home map using the clean pixel-art Seattle landmark illustration, with draggable/zoomable city, water and islands. The approved **rough 8-bit Home UI** is now live: navy/indigo framing with wood and parchment details around the header, map, zoom toolbar and navigation buttons. **Fit / 1×** fills the map panel; the header, zoom toolbar and navigation dock stay outside the city. The same 14 grey district markers **1–12, 14 and 15** open **Storybook** with only that district expanded. Queen Anne is merged into **15, Seattle Center**; marker 13 and 4.5 are removed, and **14 is South Lake Union**. Storybook shows a minimal **Mainquest N** label and assigned boss name per district; unassigned bosses are left blank. Its beige pixel-paper theme uses the slab cards' font style. The general Storybook button above Character opens all districts collapsed, and leaving the book clears expanded entries. Markers open this view rather than district mini-maps. The red blinking dot remains a preview position; GPS gating, quest completion, rewards and photo uploads are not implemented. Home also links to Character, Dons, Friends and Battle. Character keeps a wizard name and Fire/Water/Earth choice and links to account sign-in. Friends provides room-code battles; friend lists, invitations and messaging remain later additions.
+### Home map
 
-**Dons** opens the Rolodex at `#dons`. Scroll the vertical list of thumbnails and choose any entry from **Aur-1** through **Aur-11**. The selected creature appears in the large panel above the list. Each approved sprite uses at most 16 colors and has a transparent background.
+The title screen opens the expanded Seattle map. Use the top controls to zoom, fit the whole map, or return to South Lake Union. The wizard icon marks the preview location. Selecting one of the 14 grey district markers **1–12, 14 and 15** opens its Storybook page with that district expanded. **14** is South Lake Union, and **15** is Seattle Center, which includes Queen Anne. Storybook lists each district’s **Mainquest N** label and assigned boss name.
+
+The circular button in the lower-left corner opens the map menu. The menu slides up over the lower half of the map. Each destination opens a navy page with its title and a **Back** button.
+
+| Menu title | Route |
+| --- | --- |
+| Dons | `#menu/dons` |
+| Inventory | `#menu/inventory` |
+| Storybook | `#menu/storybook` |
+| Settings | `#menu/settings` |
+| Friends | `#menu/friends` |
+| Auradon Library | `#menu/auradon-library` |
+| Online battle | `#menu/online-battle` |
+
+The Rolodex is at `#dons`, the Friends screen at `#friends`, and the room lobby at `#online`. Character stores your wizard name and element and links to account sign-in.
+
+### Dons and Rolodex
+
+In the Rolodex, scroll the vertical list of thumbnails and choose any entry from **Aur-1** through **Aur-11**. The selected Don appears in the large panel above the list. Each approved sprite uses at most 16 colors and has a transparent background.
+
+#### Don type and starter reference
+
+| Don | First-stage type | Starter plan |
+| --- | --- | --- |
+| Aur-1 | Fire | Fire starter with planned final type Fire/Air |
+| Aur-2 | Earth | Earth starter with planned final type Earth/Metal |
+| Aur-3 | Ice/Wild | |
+| Aur-4 | Nature | Nature starter with final type to be decided |
+| Aur-5 | Nature/Wild | |
+| Aur-6 | Water | |
+| Aur-7 | Dragon/Air | |
+| Aur-8 | Cosmic | |
+| Aur-9 | Water | |
+| Aur-10 | Nature | |
+| Aur-11 | Dragon/Electric | |
+
+### Battles
 
 The current spellbook contains **Heatbox, Blaze, Charred Blade, Xineoph, Sunsetter, Anti-Furnace, Sea bolt, Swell, Carbonate, Pacific, Poseidon’s Rift, OffoDefo, Bengal Shield, Earthbound, Merciful, Tectonic, Metamorphic, Fortune, Misfortune, and Twist**. Spell Tower shows the deck in use during a battle.
 
 Choose Fire, Water, or Earth for each player when starting a battle. Each seat uses its compatible saved deck or a 12-slab starter for an empty slot. The starter is assigned for the match and the saved slot stays empty. Saved compositions can contain **1–30 slabs** of one element plus Fate, with unlimited copies per spell. See the [deck and spellbook reference](docs/decklists.md).
 
-The Battle shortcut offers shared-screen and two-screen play. Guest rooms use each device’s saved deck or starter. Signed-in rooms use the account’s saved deck or the server’s starter for the selected element. Each player has a private hand and can reconnect by player token. The room server validates actions and handles shuffling and dice. Rooms are held in memory, so a server restart can end a match.
+Start shared-screen play from the Friends screen at `#friends`, or use the battle chooser at `#battle-setup`. The room lobby is at `#online`. Guest rooms use each device’s saved deck or starter. Signed-in rooms use the account’s saved deck or the server’s starter for the selected element. Each player has a private hand and can reconnect by player token. The room server validates actions and handles shuffling and dice. Rooms are held in memory, so a server restart can end a match.
 
 ## Accounts and saved decks
 

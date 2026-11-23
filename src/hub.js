@@ -4,12 +4,26 @@ import { createStarterDeck, getBattleDeck, getDeckValidation, validateDeck, vali
 import { SPELLBOOK_1, SPELLBOOK_2, getDeckSpellbook, ACTIVE_SPELLBOOK_ID } from './spellbooks.js';
 import { createHubStorage, restoreHubDraft as restoreDraft } from './hub-storage.js';
 import { ELEMENTS, ELEMENT_INFO } from './elements.js';
-import { DISTRICTS, getDistrict, normalizeDistrictId, parseStorybookRoute } from './districts.js';
-import { roughNavigationArt, roughScreenStone, roughWizardPortrait, roughPartyArt } from './hub-art.js';
+import { DISTRICTS, getDistrict, normalizeDistrictId } from './districts.js';
+import { roughScreenStone, roughWizardPortrait, roughPartyArt } from './hub-art.js';
 import { pixelIconMarkup } from './pixel-icons.js';
 import { rolodexMarkup } from './rolodex.js';
 
 const HUB_SCREENS = new Set(['title', 'home', 'character', 'friends', 'dons', 'storybook', 'battle-setup']);
+const MAP_MENU_TITLES = Object.freeze({
+  'menu/dons': 'Dons',
+  'menu/inventory': 'Inventory',
+  'menu/storybook': 'Storybook',
+  'menu/settings': 'Settings',
+  'menu/friends': 'Friends',
+  'menu/auradon-library': 'Auradon Library',
+  'menu/online-battle': 'Online battle',
+});
+
+export function isHubScreen(screen) {
+  return HUB_SCREENS.has(screen) || Object.hasOwn(MAP_MENU_TITLES, screen);
+}
+
 // The square artwork includes ocean around the city. Its artwork and labels
 // share one coordinate system, so the coast moves with every pan and zoom.
 const MAP_SIZE = 2048;
@@ -157,6 +171,47 @@ export function createHub({ root, onBattle = () => {}, onMultiplayer = () => {},
   function titleHub() {
     return `<section class="wz-phone wz-title-screen"><div class="wz-title-shade"></div><div class="wz-title-brand"><p class="wz-eyebrow">A LITTLE MAGIC. A WHOLE CITY.</p><h1 tabindex="-1">Auradon</h1><p class="wz-title-subtitle">YOUR JOURNEY BEGINS IN SEATTLE</p></div><div class="wz-title-entry"><span class="wz-spark wz-spark-left" aria-hidden="true">✦</span><button class="wz-pixel-button wz-enter" data-wz-action="enter">Enter Game <span aria-hidden="true">→</span></button><span class="wz-spark wz-spark-right" aria-hidden="true">✦</span><p>EXPLORE THE CITY. FIND YOUR MAGIC.</p><button class="wz-title-account" data-wz-action="account">${activeAccountId ? 'Your account' : 'Sign in / Create account'}</button></div><div class="wz-title-bottom"><span class="wz-tiny-star" aria-hidden="true">✧</span><p>FIRE · WATER · EARTH · FATE</p></div>${footerHub()}</section>`;
   }
+  function mapMenuHub() {
+    const choices = Object.entries(MAP_MENU_TITLES).map(([route, title]) => `
+      <button type="button" class="wz-map-menu-row" data-wz-action="map-menu-destination" data-wz-destination="${route}" data-wz-focus="${route}">
+        <span>${title}</span><span aria-hidden="true">›</span>
+      </button>`).join('');
+    return `<dialog id="wz-game-menu" class="wz-map-menu" aria-labelledby="wz-map-menu-title">
+      <div class="wz-map-menu-sheet">
+        <header class="wz-map-menu-header">
+          <h2 id="wz-map-menu-title">Game menu</h2>
+          <button type="button" class="wz-map-menu-close" data-wz-action="close-map-menu" data-wz-focus="map-menu-close" aria-label="Close game menu">×</button>
+        </header>
+        <nav class="wz-map-menu-options" data-wz-scroll="map-menu-options" aria-label="Game screens">${choices}</nav>
+      </div>
+    </dialog>`;
+  }
+  function mapMenuScreenHub(title) {
+    return `<section class="wz-phone wz-panel-screen wz-menu-screen">
+      <header class="wz-header">
+        <button type="button" class="wz-back" data-wz-action="home" aria-label="Back to Seattle map">‹</button>
+        <h1 tabindex="-1">${title}</h1>
+      </header>
+    </section>`;
+  }
+  function openMapMenu() {
+    const menu = root.querySelector('#wz-game-menu');
+    if (!menu || menu.open) return;
+    menu.showModal();
+    root.querySelector('.wz-map-menu-trigger')?.setAttribute('aria-expanded', 'true');
+  }
+  function closeMapMenu() {
+    const menu = root.querySelector('#wz-game-menu');
+    if (!menu?.open) return;
+    menu.close();
+    root.querySelector('.wz-map-menu-trigger')?.setAttribute('aria-expanded', 'false');
+  }
+  root.addEventListener('close', event => {
+    if (event.target.id === 'wz-game-menu' && root.contains(event.target) && !event.target.open) {
+      root.querySelector('.wz-map-menu-trigger')?.setAttribute('aria-expanded', 'false');
+    }
+  }, true);
+
   function homeHub() {
     return `<section class="wz-phone wz-home-screen">
       <div class="wz-home-stone" aria-hidden="true">${Array.from({length:72},()=>mapUiArt('mapStoneTexture','wz-map-stone-tile')).join('')}</div>
@@ -168,14 +223,16 @@ export function createHub({ root, onBattle = () => {}, onMultiplayer = () => {},
           <div class="wz-map-art" aria-hidden="true"></div>
           <div class="wz-map-city" aria-label="Storybook districts">
           ${DISTRICTS.map(item => `<button type="button" class="wz-district-marker" data-wz-action="district" data-wz-district="${item.id}" data-wz-focus="district-${item.id}" style="left:${item.position.x*100}%;top:${item.position.y*100}%;--wz-marker-offset-y:${({1:4,10:-4,14:4,15:-4})[item.id]||0}px" aria-label="District ${item.id}: ${escapeHub(item.name)}. Open Storybook chapter." title="${item.id} · ${escapeHub(item.name)}"><span class="wz-district-number" aria-hidden="true">${item.id}</span></button>`).join('')}
-          <div class="wz-you-marker" role="img" aria-label="Your location, preview position only"><span class="wz-location-dot" aria-hidden="true"></span></div>
+          <div class="wz-you-marker" role="img" aria-label="Your location, preview position only"><img src="${escapeHub(assets.wizardLocation || ASSETS.wizardLocation)}" alt="" draggable="false"></div>
           </div>
         </div>
       </div>
-      ${mapFrameArt()}</div>
+      ${mapFrameArt()}
+      <button type="button" class="wz-map-menu-trigger" data-wz-action="open-map-menu" data-wz-focus="map-menu-trigger" aria-label="Game menu" aria-haspopup="dialog" aria-controls="wz-game-menu" aria-expanded="false"><span class="wz-map-menu-glyph" aria-hidden="true"></span></button>
+      </div>
       <p id="wz-map-instructions" class="sr-only">Drag the map with a mouse or finger. Tap a numbered district to read its Storybook chapter. Fit shows the complete city. With the map focused, use arrow keys to explore, plus and minus to zoom, or Home to center South Lake Union.</p>
 
-      <nav class="wz-map-controls" aria-label="Game screens"><div class="wz-left-controls"><button type="button" class="wz-map-button wz-storybook-button" data-wz-action="storybook" aria-label="Open your Storybook district journal" title="Your Seattle Storybook">${mapUiArt('mapStorybook')}</button><button type="button" class="wz-map-button wz-character-button" data-wz-action="character" aria-label="Open your character">${roughNavigationArt('character')}</button></div><div class="wz-right-controls"><button type="button" class="wz-map-button wz-battle-button" data-wz-action="battle" aria-label="Open battle playtest">${roughNavigationArt('battle')}</button><button type="button" class="wz-map-button" data-wz-action="friends" aria-label="Open Friends">${roughNavigationArt('friends')}</button><button type="button" class="wz-map-button" data-wz-action="dons" aria-label="Dons" title="Open the Dons Rolodex">${roughNavigationArt('deck')}</button></div></nav><p class="wz-map-preview">MAP PREVIEW · LOCATION NOT CONNECTED</p>${footerHub()}</section>`;
+      <p class="wz-map-preview">PREVIEW LOCATION</p>${footerHub()}${mapMenuHub()}</section>`;
   }
 
   function storybookHub() {
@@ -340,8 +397,13 @@ export function createHub({ root, onBattle = () => {}, onMultiplayer = () => {},
     const active = root.contains(document.activeElement) ? document.activeElement : null;
     const focusKey = active?.dataset.wzFocus;
     const selection = active?.tagName === 'INPUT' && active.type === 'text' ? [active.selectionStart, active.selectionEnd] : null;
+    const reopenMenu = screen === 'home' && root.querySelector('#wz-game-menu')?.open;
+    if (reopenMenu) closeMapMenu();
     root.dataset.wzScreen = screen;
-    root.innerHTML = ({ title: titleHub, home: homeHub, character: characterHub, friends: friendsHub, dons: donsHub, storybook: storybookHub, 'battle-setup': battleSetupHub }[screen])() + (notice ? `<div class="wz-notice" role="status">${escapeHub(notice)}</div>` : '');
+    const page = Object.hasOwn(MAP_MENU_TITLES, screen) ? mapMenuScreenHub(MAP_MENU_TITLES[screen])
+      : ({ title: titleHub, home: homeHub, character: characterHub, friends: friendsHub, dons: donsHub, storybook: storybookHub, 'battle-setup': battleSetupHub }[screen])();
+    root.innerHTML = page + (notice ? `<div class="wz-notice" role="status">${escapeHub(notice)}</div>` : '');
+    if (reopenMenu) openMapMenu();
     applyMapView();
     const mapViewport = root.querySelector('.wz-map-viewport');
     if (mapViewport) mapObserver?.observe(mapViewport);
@@ -353,7 +415,9 @@ export function createHub({ root, onBattle = () => {}, onMultiplayer = () => {},
     }
   }
   function show(nextScreen = 'title', options = {}) {
-    const next = HUB_SCREENS.has(nextScreen) ? nextScreen : 'title';
+    const next = isHubScreen(nextScreen) ? nextScreen : 'title';
+    const previous = screen;
+    closeMapMenu();
     const districtId=next==='storybook'?normalizeDistrictId(options.districtId):null;
     const changed = !visible || next !== screen || next==='storybook'&&districtId!==storybookDistrictId;
     if(screen==='storybook'||next==='storybook')resetStorybook();
@@ -368,13 +432,14 @@ export function createHub({ root, onBattle = () => {}, onMultiplayer = () => {},
     if (options.history !== false && location.hash !== hash) history.pushState({ auradonScreen: next, districtId }, '', hash);
     render();
     if(next==='storybook'&&districtId!==null)focusStorybookDistrict(districtId);
-    else if(next==='home'&&mapReturnDistrictId!==null)root.querySelector(`[data-wz-district="${mapReturnDistrictId}"]`)?.focus({preventScroll:true});
+    else if(next==='home'&&Object.hasOwn(MAP_MENU_TITLES, previous))root.querySelector('.wz-map-menu-trigger')?.focus({preventScroll:true});
+    else if(next==='home'&&previous==='storybook'&&mapReturnDistrictId!==null)root.querySelector(`[data-wz-district="${mapReturnDistrictId}"]`)?.focus({preventScroll:true});
     else if(changed){
       if(next==='storybook')root.querySelector('.wz-storybook-scroll').scrollTop=0;
       root.querySelector('h1')?.focus({preventScroll:true});
     }
   }
-  function hide() { finishMapDrag(); mapObserver?.disconnect(); resetStorybook(); visible = false; root.hidden = true; }
+  function hide() { closeMapMenu(); finishMapDrag(); mapObserver?.disconnect(); resetStorybook(); visible = false; root.hidden = true; }
   function getSavedDecks() { return cloneHub(books[ACTIVE_SPELLBOOK_ID].savedDecks); }
   function getBattleDecks(saved = getSavedDecks()) {
     return Object.fromEntries(ELEMENTS.map(element => [element, getBattleDeck(saved[element], element)]));
@@ -464,11 +529,19 @@ export function createHub({ root, onBattle = () => {}, onMultiplayer = () => {},
 
   root.addEventListener('click', event => {
     if (event.detail > 0 && Date.now() < suppressMapClickUntil && event.target.closest('.wz-map-viewport')) { event.preventDefault(); return; }
+    if (event.target.id === 'wz-game-menu') { closeMapMenu(); return; }
     const button = event.target.closest('[data-wz-action]');
     if (!button || !root.contains(button) || button.disabled) return;
     switch (button.dataset.wzAction) {
       case 'enter': show('home'); break;
       case 'title': case 'home': case 'character': case 'friends': case 'dons': show(button.dataset.wzAction); break;
+      case 'open-map-menu': openMapMenu(); break;
+      case 'close-map-menu': closeMapMenu(); break;
+      case 'map-menu-destination': {
+        const route = button.dataset.wzDestination;
+        if (Object.hasOwn(MAP_MENU_TITLES, route)) show(route);
+        break;
+      }
       case 'select-aur': selectedAur = Number(button.dataset.wzAur); render(); break;
       case 'district': {
         const id=normalizeDistrictId(button.dataset.wzDistrict);
@@ -504,13 +577,5 @@ export function createHub({ root, onBattle = () => {}, onMultiplayer = () => {},
     messageHub(stored ? 'Your wizard name is saved.' : 'Name updated for this session. Device saving is unavailable.');
     render();
   });
-  const followHashHub = () => {
-    const journal=parseStorybookRoute(location.hash);
-    if(journal){show('storybook',{districtId:journal.districtId,history:false});return;}
-    const next = location.hash.slice(1);
-    if (HUB_SCREENS.has(next)) show(next, { history: false });
-  };
-  window.addEventListener('hashchange', followHashHub);
-  window.addEventListener('popstate', followHashHub);
   return { show, hide, render, showBattleChooser, setDeckNotice, getSavedDecks, getSelectedSpellbookId: () => ACTIVE_SPELLBOOK_ID, getProfile, getLocalData, applyAccountData, clearAccountData, setAccountStatus, isVisible: () => visible };
 }

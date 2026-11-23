@@ -4,7 +4,7 @@ Earth is available alongside Fire and Water in shared-screen and two-screen batt
 
 ## Start a battle
 
-1. Open **Battle** and choose the shared-screen option.
+1. Open the game URL with `#battle-setup` to choose your players.
 2. Set either seat to **Earth**. Each seat uses its element’s saved deck when available, with a 12-slab starter for empty slots.
 3. Choose the other player’s element. In a mirror match, each player gets a separate copy of the same composition.
 4. Start the battle and roll for initiative. Each player receives up to five opening slabs. The second player draws one additional slab when their first turn starts if the tower has one. Later draws and hand refreshes fill to six while cards remain.

@@ -92,15 +92,36 @@ test('empty slots use starter decks without writing to saved decks', t => {
   }
 });
 
-test('Dons opens the Rolodex and updates the large portrait for all 11 entries', t => {
+test('the Home menu exposes seven titled pages and returns to the map from each', t => {
+  const { root, hub } = setupHub(t);
+  const destinations = [
+    ['dons', 'Dons'], ['inventory', 'Inventory'], ['storybook', 'Storybook'],
+    ['settings', 'Settings'], ['friends', 'Friends'], ['auradon-library', 'Auradon Library'],
+    ['online-battle', 'Online battle'],
+  ];
+  hub.show('home');
+  assert.match(root.innerHTML, /aria-controls="wz-game-menu" aria-expanded="false"/);
+  assert.match(root.innerHTML, /<dialog id="wz-game-menu"/);
+  for (const [slug, title] of destinations) {
+    const route = `menu/${slug}`;
+    assert.ok(root.innerHTML.includes(`data-wz-destination="${route}"`));
+    root.click('map-menu-destination', { wzDestination: route });
+    assert.equal(location.hash, `#${route}`);
+    assert.ok(root.innerHTML.includes(`<h1 tabindex="-1">${title}</h1>`));
+    assert.doesNotMatch(root.innerHTML, /wz-map-viewport|wz-rolodex-list/);
+    root.click('home');
+    assert.equal(location.hash, '#home');
+  }
+});
+
+test('the Rolodex route updates the large portrait for all 11 entries', t => {
   const { root, hub, battles, storage } = setupHub(t, { profileElement: 'fire', ready: ['earth', 'fire'] });
   hub.show('title');
   assert.match(root.innerHTML, /<h1 tabindex="-1">Auradon<\/h1>/);
   hub.show('home');
   assert.match(root.innerHTML, /wz-map-banner-label">Auradon<\/span>/);
-  assert.match(root.innerHTML, /data-wz-action="dons" aria-label="Dons"/);
   const before = new Map(storage.items);
-  root.click('dons');
+  hub.show('dons');
   assert.equal(location.hash, '#dons');
   assert.match(root.innerHTML, /<h1 tabindex="-1">Rolodex<\/h1>/);
   assert.match(root.innerHTML, /<figcaption>Aur-1<\/figcaption>/);
@@ -112,7 +133,7 @@ test('Dons opens the Rolodex and updates the large portrait for all 11 entries',
     assert.equal((root.innerHTML.match(/aria-pressed="true"/g) || []).length, 1);
   }
   assert.deepEqual(storage.items, before);
-  hub.show('home');
+  hub.show('friends');
   root.click('battle');
   assert.equal(battles.at(-1).element, 'fire');
   assert.equal(battles.at(-1).selectedElements, undefined);

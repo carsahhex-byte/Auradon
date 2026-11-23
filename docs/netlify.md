@@ -44,7 +44,7 @@ For accounts or two-phone play, deploy a separate Auradon HTTPS game server.
 
 1. Build and start the server from Auradon’s `main` branch.
 2. Add the exact Netlify origin to its comma-separated `AURADON_ALLOWED_ORIGINS`, preserving other allowed origins. Example: `https://carsahhex-byte.github.io,https://YOUR-SITE.netlify.app`. Do not include `/#title`, `/Auradon/`, or a trailing slash.
-3. Enter the server's real HTTPS URL in **Account** and **Battle → Play on two screens** on both phones.
+3. Enter the server's real HTTPS URL in **Account** and the **Battle Portal** at `#online` on both phones.
 
 Fresh `*.netlify.app` installs leave the server address unconfigured instead of trying to use Netlify as the room API. Explicit or previously saved server addresses still work. See [the server setup guide](multiplayer.md) for hosting and persistence.
 

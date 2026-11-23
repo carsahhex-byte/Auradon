@@ -9,7 +9,7 @@ const gameOnly = process.argv.includes('--game-only');
 if (gameOnly && !webOnly) throw new Error('Use --web with --game-only for a production website release.');
 // Dependencies precede their importers in both the hosted and standalone builds.
 const moduleNames = ['elements.js', 'optimized-art.js', 'spells.js', 'spellbooks.js', 'decks.js', 'effects.js', 'game.js', 'duel-storage.js', 'asset-url.js', 'pixel-icons.js', 'slab-text.js', 'assets.js', 'spell-visuals.js', 'animation-sprites.js', 'enhancement-animation.js', 'idle-sprites.js', 'battle-scene.js', 'custom-spell-sheets.js', 'revised-spell-sheets.js', 'revised-spell-animation.js', 'creature-animation.js', 'xineoph-animation.js', 'custom-spell-animation.js', 'spell-animation.js', 'aura-animation.js', 'mana-animation.js', 'merciful-animation.js', 'fate-animation.js', 'health-bars.js', 'hub-storage.js', 'districts.js', 'hub-art.js', 'rolodex.js', 'hub.js', 'backend.js', 'multiplayer.js', 'accounts.js', 'battle-props.js', 'battle-choice.js', 'main.js'];
-const styleNames = ['style.css', 'hub.css', 'rolodex.css', 'multiplayer.css', 'accounts.css'];
+const styleNames = ['style.css', 'hub.css', 'map-menu.css', 'rolodex.css', 'multiplayer.css', 'accounts.css'];
 for (const filename of moduleNames) execFileSync(process.execPath, ['--check', `src/${filename}`], { stdio: 'inherit' });
 await rm('dist', { recursive: true, force: true });
 await mkdir('dist');

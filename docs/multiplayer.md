@@ -43,7 +43,7 @@ Use this locally served **HTTP** app on both phones. The HTTPS GitHub Pages site
 
 The LAN address and GitHub Pages have separate browser storage. For the same saved account decks on both sites, sign into the same game server. Empty deck slots use the selected element’s 12-slab starter.
 
-On each phone, open **Battle → Play on two screens** to reach **Battle Portal**. Its **Game server address** normally fills with the local app's address, such as `http://192.168.1.20:8788`. If older saved settings show another address, replace it with the same local address on both phones. Enter a wizard name. One phone chooses Fire, Water or Earth and taps **Create battle →**; the other chooses its own element, enters the shared eight-character **Room code** and taps **Join →**. Each phone uses its selected element’s saved deck or starter. Both may choose the same element. Both players then complete their opening die rolls.
+On each phone, open the **Battle Portal** at the game URL with `#online`. Its **Game server address** normally fills with the local app's address, such as `http://192.168.1.20:8788`. If older saved settings show another address, replace it with the same local address on both phones. Enter a wizard name. One phone chooses Fire, Water or Earth and taps **Create battle →**; the other chooses its own element, enters the shared eight-character **Room code** and taps **Join →**. Each phone uses its selected element’s saved deck or starter. Both may choose the same element. Both players then complete their opening die rolls.
 
 ## Current named spellbook
 
@@ -87,7 +87,7 @@ A free ephemeral filesystem is unsuitable for permanent accounts: the database c
 
 `AURADON_ALLOWED_ORIGINS` is a comma-separated list of exact frontend origins. It contains scheme and host, plus a nonstandard port if used; omit `/Auradon/`, trailing slashes, and wildcards. Add your own frontend origin if needed. Use HTTPS for remote sign-in and matches.
 
-After deployment, open the host's HTTPS address followed by `/api/health` and confirm the `service` value is `auradon-multiplayer`. Then open the app from that host, or use the existing [Auradon website](https://carsahhex-byte.github.io/Auradon/) and enter the HTTPS server address in Account and **Battle → Two Screens**. No account secret belongs in repository files or build arguments.
+After deployment, open the host's HTTPS address followed by `/api/health` and confirm the `service` value is `auradon-multiplayer`. Then open the app from that host, or use the existing [Auradon website](https://carsahhex-byte.github.io/Auradon/) and enter the HTTPS server address in Account and the **Battle Portal** at `#online`. No account secret belongs in repository files or build arguments.
 
 A custom frontend can also set `globalThis.AURADON_MULTIPLAYER_URL` to the Auradon API address before loading the game module. The frontend checks the API’s service identity before registering, signing in, or connecting to a room. Keep the Auradon service and its database on their own deployment and persistent volume.
 
@@ -108,7 +108,7 @@ Back up the data directory separately from the source repository. For a simple c
 ## Create and join a battle
 
 1. Sign in to use account decks, or continue as a guest. A compatible saved deck takes priority for each player’s selected element. The starter is ready when that slot is empty.
-2. Open **Battle → Play on two screens**, or **Friends → Create or join a battle**. In Battle Portal, both devices use the same **Game server address** and enter their wizard names.
+2. Open the game URL with `#online`. In Battle Portal, both devices use the same **Game server address** and enter their wizard names.
 3. The host chooses Fire, Water or Earth and taps **Create battle →**. Share the eight-character **Room code**. The other player independently chooses Fire, Water or Earth, enters the code and taps **Join →**. All pairings are allowed, including mirror matches.
 4. Each player rolls **one d6** to decide who starts. Higher goes first; ties reroll both. Fate and Loaded do not affect initiative.
 5. Each player starts with **up to five slabs**, limited by their deck's cards. The second player draws **one extra slab when their first own turn begins if a tower card is available**, up to the six-slab hand limit. If they already used Fate, this adds one to the remaining hand rather than filling it to six. Small decks may have no opening tower cards. Neither player gains the later-turn +2 mana on their opening turn; empty towers do not reshuffle or cause fatigue damage.

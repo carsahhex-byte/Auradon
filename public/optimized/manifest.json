@@ -29,6 +29,16 @@
     "width": 1254,
     "height": 1254
   },
+  "wizardLocation": {
+    "file": "wizardLocation-28dc2edb6f82.webp",
+    "source": "Auradon-Wizard-Location.png",
+    "sourceSha256": "58a217b6441aa7211d652f409ddfdcfeaccdbf6906002350d19608b5c4dcaa2e",
+    "optimizedSha256": "28dc2edb6f82cb914b4f2b16a701daa0de42c87716ba501147cc628aa22fb1c2",
+    "bytes": 6600,
+    "sourceBytes": 7974,
+    "width": 68,
+    "height": 88
+  },
   "iconAtlas": {
     "file": "iconAtlas-b50d0616369c.webp",
     "source": "Wizzy Interface Icons.png",

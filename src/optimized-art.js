@@ -15,6 +15,11 @@ export const OPTIMIZED_ART = {
     "sourceSha256": "b2483c08f9b97d08946da92716b0e6a479509caad32a20b0f9a90aebd43d9d8d",
     "optimizedSha256": "90799b4dc2665b0b1d7905838c12e88b29293a610ab79b3e3051f9381cd6f980"
   },
+  "wizardLocation": {
+    "file": "wizardLocation-28dc2edb6f82.webp",
+    "sourceSha256": "58a217b6441aa7211d652f409ddfdcfeaccdbf6906002350d19608b5c4dcaa2e",
+    "optimizedSha256": "28dc2edb6f82cb914b4f2b16a701daa0de42c87716ba501147cc628aa22fb1c2"
+  },
   "iconAtlas": {
     "file": "iconAtlas-b50d0616369c.webp",
     "sourceSha256": "318ea01449ccb5480e8258c056f87216392bd567dc32813e3e87541436e82bf6",
