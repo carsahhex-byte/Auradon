@@ -1,5 +1,5 @@
-import { COMBAT_ANIMATION_SHEETS } from './assets.3d11fe907a6d.js';
-import { preloadAnimationSheet, createAnimationSprite, paintAnimationFrame, hideAnimationSprite } from './animation-sprites.238953ec14fe.js';
+import { COMBAT_ANIMATION_SHEETS } from './assets.c357791527d6.js';
+import { preloadAnimationSheet, createAnimationSprite, paintAnimationFrame, hideAnimationSprite } from './animation-sprites.4a524ddf1313.js';
 import { getPlayerSchool } from './elements.f91c53cdab44.js';
 
 const FEET = [{ x: 236, y: 439 }, { x: 788, y: 439 }];

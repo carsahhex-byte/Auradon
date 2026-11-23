@@ -1,13 +1,14 @@
 /** Original uploaded artwork. Crop metadata only hides transparent export margins. */
-import { resolveAssetUrl } from './asset-url.cfe834092a2b.js';
+import { resolveAssetUrl } from './asset-url.888856453108.js';
 import { SPELL_CATALOG } from './spells.869c60df6fda.js';
-import { COMPACT_SPELL_TEXT, slabRulesMarkup } from './slab-text.ff977806d8c5.js';
-import { PIXEL_ICON_FILE, PIXEL_ICON_CROPS } from './pixel-icons.70e0c90bd27d.js';
+import { COMPACT_SPELL_TEXT, slabRulesMarkup } from './slab-text.013375c642e9.js';
+import { PIXEL_ICON_FILE, PIXEL_ICON_CROPS } from './pixel-icons.39e5a4ff60a9.js';
 
 export const ASSET_FILES = Object.freeze({
   titleScene: 'Wizzy Seattle Title.png',
   seattleMap: 'Wizzy Seattle Map.png',
   seattleExpanded: 'Wizzy Seattle Expanded Map.png',
+  wizardLocation: 'Auradon-Wizard-Location.png',
   iconAtlas: 'Wizzy Interface Icons.png',
   appIcon: 'Wizzy App Icon.png',
   storybookIcon: 'Wizzy Storybook Icon.png',

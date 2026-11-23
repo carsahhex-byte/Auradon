@@ -1,23 +1,23 @@
 import { getEnhancementBonus, createGame, rollInitiative, selectCard, castSelected, castFateSelected, skipFate, rollDice, resolveSpell, endTurn, beginRefresh, toggleRefreshCard, confirmRefresh, cancelRefresh, canCancelStagedAction, cancelStagedAction, getActingPlayerIndex, canSelectCard, canCastSelected, getEmberSpendRange, SPELL_RULES, HAND_LIMIT, OPENING_HAND_SIZE, activateEnhancement, rollEnhancement, canEnhance, MAX_ENHANCEMENT, ENHANCEMENT_THRESHOLD, activateAura, canActivateAura, AURA_COST, AURA_DURATION, AURA_BONUS } from './game.0d76f3dc0dbd.js';
-import { ASSETS, ASSET_CROPS, spellArtMarkup, spellSlabMarkup } from './assets.3d11fe907a6d.js';
+import { ASSETS, ASSET_CROPS, spellArtMarkup, spellSlabMarkup } from './assets.c357791527d6.js';
 import { SPELL_CATALOG } from './spells.869c60df6fda.js';
 import { validateDeck, getDeckValidation } from './decks.937e5d31de2c.js';
 import { MAX_HP, MAX_MANA, MAX_SHIELD, MAX_FLOW, MAX_EMBERS, isShieldBypassActive } from './effects.17b76112a157.js';
-import { createHub } from './hub.d6781df3c447.js';
+import { createHub, isHubScreen } from './hub.3272fde021c6.js';
 import { parseStorybookRoute } from './districts.41d180c8958a.js';
 import { createMultiplayer } from './multiplayer.be15f49ac9de.js';
 import { createAccounts } from './accounts.299a50537455.js';
-import { fitSlabText } from './slab-text.ff977806d8c5.js';
-import { createBattleScene } from './battle-scene.751dcbaeac6b.js';
-import { createSpellAnimator } from './spell-animation.b6ebc0027de6.js';
-import { createAuraAnimator } from './aura-animation.3bd4923ef10e.js';
-import { createMercifulAnimator } from './merciful-animation.9078a41b3ab3.js';
+import { fitSlabText } from './slab-text.013375c642e9.js';
+import { createBattleScene } from './battle-scene.1bfa7f62ed12.js';
+import { createSpellAnimator } from './spell-animation.7693a6df442d.js';
+import { createAuraAnimator } from './aura-animation.9554971b087e.js';
+import { createMercifulAnimator } from './merciful-animation.269e70c0aa86.js';
 import { createManaAnimator } from './mana-animation.908383aa5689.js';
-import { createFateAnimator } from './fate-animation.9fd6539eb051.js';
-import { battlePileMarkup } from './battle-props.70be4038bfa6.js';
+import { createFateAnimator } from './fate-animation.ffe7e955be95.js';
+import { battlePileMarkup } from './battle-props.a570a6317481.js';
 import { getResolvedBattleVisuals } from './spell-visuals.b233f4cab94a.js';
 import { createHealthBars } from './health-bars.b204b645d6fa.js';
-import { pixelIconMarkup } from './pixel-icons.70e0c90bd27d.js';
+import { pixelIconMarkup } from './pixel-icons.39e5a4ff60a9.js';
 import { ACTIVE_SPELLBOOK_ID, getDeckSpellbook, getSpellbook } from './spellbooks.20bd769300e2.js';
 import { getGameSpellbook } from './game.0d76f3dc0dbd.js';
 import { createDuelStorage } from './duel-storage.d5ce04c1a6a4.js';
@@ -1054,7 +1054,7 @@ function syncAppRoute(){
     }else{restoreLocalBattle(hub.getSelectedSpellbookId());enterBattle();}
     return;
   }
-  leaveBattle(['title','home','character','friends','dons','battle-setup'].includes(screen)?screen:'title');
+  leaveBattle(isHubScreen(screen)?screen:'title');
 }
 window.addEventListener('hashchange',syncAppRoute);
 window.addEventListener('popstate',syncAppRoute);

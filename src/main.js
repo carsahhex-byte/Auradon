@@ -3,7 +3,7 @@ import { ASSETS, ASSET_CROPS, spellArtMarkup, spellSlabMarkup } from './assets.j
 import { SPELL_CATALOG } from './spells.js';
 import { validateDeck, getDeckValidation } from './decks.js';
 import { MAX_HP, MAX_MANA, MAX_SHIELD, MAX_FLOW, MAX_EMBERS, isShieldBypassActive } from './effects.js';
-import { createHub } from './hub.js';
+import { createHub, isHubScreen } from './hub.js';
 import { parseStorybookRoute } from './districts.js';
 import { createMultiplayer } from './multiplayer.js';
 import { createAccounts } from './accounts.js';
@@ -1054,7 +1054,7 @@ function syncAppRoute(){
     }else{restoreLocalBattle(hub.getSelectedSpellbookId());enterBattle();}
     return;
   }
-  leaveBattle(['title','home','character','friends','dons','battle-setup'].includes(screen)?screen:'title');
+  leaveBattle(isHubScreen(screen)?screen:'title');
 }
 window.addEventListener('hashchange',syncAppRoute);
 window.addEventListener('popstate',syncAppRoute);

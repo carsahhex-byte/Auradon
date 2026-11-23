@@ -8,6 +8,7 @@ export const ASSET_FILES = Object.freeze({
   titleScene: 'Wizzy Seattle Title.png',
   seattleMap: 'Wizzy Seattle Map.png',
   seattleExpanded: 'Wizzy Seattle Expanded Map.png',
+  wizardLocation: 'Auradon-Wizard-Location.png',
   iconAtlas: 'Wizzy Interface Icons.png',
   appIcon: 'Wizzy App Icon.png',
   storybookIcon: 'Wizzy Storybook Icon.png',
