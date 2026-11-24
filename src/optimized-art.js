@@ -70,6 +70,11 @@ export const OPTIMIZED_ART = {
     "sourceSha256": "ba84b0cdcb676dd23b22b1beaa42a9c634299bf1ad4870ed978bfdfe4457cdde",
     "optimizedSha256": "809953ee316aad318ce57c18c606c1a2b6526efb1b10dbc2459f631082b63b84"
   },
+  "aur61": {
+    "file": "aur61-8788bb120ebd.webp",
+    "sourceSha256": "8c2fb4ad72f4d11a953cc69b0dcd3b6fc196c84ad1caf005eb99cc740e474298",
+    "optimizedSha256": "8788bb120ebdce31b2a51971e96db0b3cf3a066ca52b3b4229efb14358f1069f"
+  },
   "aur7": {
     "file": "aur7-77b19713e03d.webp",
     "sourceSha256": "7f32e03470b02ce0bd123bdabace7bfca843c51b55f2d8048c8b6e33074e713d",

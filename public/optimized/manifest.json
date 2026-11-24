@@ -139,6 +139,16 @@
     "width": 1680,
     "height": 1104
   },
+  "aur61": {
+    "file": "aur61-8788bb120ebd.webp",
+    "source": "Aur-6.1.png",
+    "sourceSha256": "8c2fb4ad72f4d11a953cc69b0dcd3b6fc196c84ad1caf005eb99cc740e474298",
+    "optimizedSha256": "8788bb120ebdce31b2a51971e96db0b3cf3a066ca52b3b4229efb14358f1069f",
+    "bytes": 14584,
+    "sourceBytes": 38367,
+    "width": 1065,
+    "height": 719
+  },
   "aur7": {
     "file": "aur7-77b19713e03d.webp",
     "source": "Aur-7.png",

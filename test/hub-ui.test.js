@@ -34,7 +34,7 @@ class HubRoot {
 }
 
 const book = bookId => ({ savedDecks: Object.fromEntries(ELEMENTS.map(element => [element, createStarterDeck(element, bookId)])), drafts: null, cloudDecks: null });
-function setupHub(t, { profileElement = 'earth', ready = ['earth'] } = {}) {
+function setupHub(t, { profileElement = 'earth', ready = ['earth'], onMapMenuDestination } = {}) {
   const storage = new BrowserStorage();
   const mockGlobal = (name, value) => {
     const descriptor = Object.getOwnPropertyDescriptor(globalThis, name);
@@ -54,7 +54,7 @@ function setupHub(t, { profileElement = 'earth', ready = ['earth'] } = {}) {
   mockGlobal('window', { addEventListener() {} });
   t.mock.method(globalThis, 'setTimeout', () => 0);
   const root = new HubRoot(), battles = [];
-  const hub = createHub({ root, onBattle: details => battles.push(details) });
+  const hub = createHub({ root, onBattle: details => battles.push(details), onMapMenuDestination });
   return { root, hub, battles, storage };
 }
 const pressed = (root, seat, element) => new RegExp(`data-wz-seat="${seat}" data-wz-element="${element}"[^>]*aria-pressed="true"`).test(root.innerHTML);
@@ -95,9 +95,9 @@ test('empty slots use starter decks without writing to saved decks', t => {
 test('the Home menu exposes seven titled pages and returns to the map from each', t => {
   const { root, hub } = setupHub(t);
   const destinations = [
-    ['dons', 'Dons'], ['inventory', 'Inventory'], ['storybook', 'Storybook'],
+    ['dons', 'Auradons'], ['inventory', 'Inventory'], ['storybook', 'Storybook'],
     ['settings', 'Settings'], ['friends', 'Friends'], ['auradon-library', 'Auradon Library'],
-    ['online-battle', 'Online battle'],
+    ['battle', 'Battle'],
   ];
   hub.show('home');
   assert.match(root.innerHTML, /aria-controls="wz-game-menu" aria-expanded="false"/);
@@ -112,6 +112,24 @@ test('the Home menu exposes seven titled pages and returns to the map from each'
     root.click('home');
     assert.equal(location.hash, '#home');
   }
+});
+
+test('the map menu opens routed team and battle screens through the app', t => {
+  const routes = [];
+  const { root, hub } = setupHub(t, {
+    onMapMenuDestination: route => {
+      routes.push(route);
+      return ['menu/dons', 'menu/auradon-library', 'menu/battle'].includes(route);
+    },
+  });
+  hub.show('home');
+  for (const route of ['menu/dons', 'menu/auradon-library', 'menu/battle']) {
+    root.click('map-menu-destination', { wzDestination: route });
+    assert.equal(routes.at(-1), route);
+    assert.equal(location.hash, '#home');
+  }
+  root.click('map-menu-destination', { wzDestination: 'menu/inventory' });
+  assert.equal(location.hash, '#menu/inventory');
 });
 
 test('the Rolodex route updates the large portrait for all 11 entries', t => {

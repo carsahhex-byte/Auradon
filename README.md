@@ -1,6 +1,6 @@
 # Auradon · Seattle spell slab prototype
 
-A mobile-first pixel-art game with a Seattle map, a creature Rolodex, and a two-player battle arena. Fire, Water, and Earth wizards can battle on one screen or use separate browsers connected to a room server. The current spellbook contains 20 active slabs across Fire, Water, Earth, and Fate.
+A mobile-first pixel-art game with a Seattle map, an Auradon team library, and a two-player battle arena. Saved Auradon teams can face each other on one screen. The original wizard duels also support separate browsers connected to a room server.
 
 [Open Auradon](https://carsahhex-byte.github.io/Auradon/#title) starts at the title screen. A new duel starts at **100 / 100 HP, 3 / 10 Mana, and 0 / 30 Shield**; the second number is each resource's maximum.
 
@@ -40,37 +40,46 @@ The circular button in the lower-left corner opens the map menu. The menu slides
 
 | Menu title | Route |
 | --- | --- |
-| Dons | `#menu/dons` |
+| Auradons | `#menu/dons` |
 | Inventory | `#menu/inventory` |
 | Storybook | `#menu/storybook` |
 | Settings | `#menu/settings` |
 | Friends | `#menu/friends` |
 | Auradon Library | `#menu/auradon-library` |
-| Online battle | `#menu/online-battle` |
+| Battle | `#menu/battle` |
 
 The Rolodex is at `#dons`, the Friends screen at `#friends`, and the room lobby at `#online`. Character stores your wizard name and element and links to account sign-in.
 
-### Dons and Rolodex
+### Auradon teams and moves
+
+In **Auradon Library**, add up to six Auradons to a team and save it with a name. You can save multiple teams and choose which one appears in **Auradons**. Open a team member to view its sprite, Stats and Moves. Use the type dropdowns in **Moves** to choose up to four moves for that member. Saved teams and move selections are stored on this device.
+
+In **Battle**, select a saved team for each player. Choosing a move resolves it immediately. To switch, open **Team**, select a reserve and confirm. A replacement after a knockout is free. Damage, mana costs and utility effects are playtest values. The Ice move list is pending, and Xineoph is reserved for later.
+
+Each attack uses its move’s type against each defending type and multiplies the results. A weakness (2×) and a resistance (0.5×) cancel. An Ice/Wild Auradon takes 4× from Metal. Dragon and Cosmic each deal 2× damage to Void in this playtest. A single matchup that appears as both an outgoing strength and an incoming weakness counts once.
+
+### Rolodex
 
 In the Rolodex, scroll the vertical list of thumbnails and choose any entry from **Aur-1** through **Aur-11**. The selected Don appears in the large panel above the list. Each approved sprite uses at most 16 colors and has a transparent background.
 
 #### Don type and starter reference
 
-| Don | First-stage type | Starter plan |
+| Don | Type | Starter plan |
 | --- | --- | --- |
 | Aur-1 | Fire | Fire starter with planned final type Fire/Air |
 | Aur-2 | Earth | Earth starter with planned final type Earth/Metal |
 | Aur-3 | Ice/Wild | |
-| Aur-4 | Nature | Nature starter with final type to be decided |
+| Aur-4 | Nature | |
 | Aur-5 | Nature/Wild | |
-| Aur-6 | Water | |
+| Aur-6 | Water | Evolves from Aur-6.1 |
+| Aur-6.1 | Water | Water starter and pre-evolution of Aur-6. Temporary tag. |
 | Aur-7 | Dragon/Air | |
 | Aur-8 | Cosmic | |
 | Aur-9 | Water | |
 | Aur-10 | Nature | |
 | Aur-11 | Dragon/Electric | |
 
-### Battles
+### Wizard duels
 
 The current spellbook contains **Heatbox, Blaze, Charred Blade, Xineoph, Sunsetter, Anti-Furnace, Sea bolt, Swell, Carbonate, Pacific, Poseidon’s Rift, OffoDefo, Bengal Shield, Earthbound, Merciful, Tectonic, Metamorphic, Fortune, Misfortune, and Twist**. Spell Tower shows the deck in use during a battle.
 
