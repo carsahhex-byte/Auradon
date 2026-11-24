@@ -23,6 +23,9 @@ import { getGameSpellbook } from './game.js';
 import { createDuelStorage } from './duel-storage.js';
 import { ELEMENTS, ELEMENT_INFO, getPlayerSchool } from './elements.js';
 import { classifyBattleChoice } from './battle-choice.js';
+import { createAuradonTeams } from './auradon-teams.js';
+import { createAuradonTeamUi } from './auradon-team-ui.js';
+import { createAuradonBattleUi } from './auradon-battle-ui.js';
 
 let duelDeviceStorage = null;
 try { duelDeviceStorage = globalThis.localStorage; } catch {}
@@ -832,7 +835,7 @@ document.addEventListener('pointerdown',event=>{
 window.addEventListener('scroll',positionEmberChoice,true);
 window.visualViewport?.addEventListener('resize',positionEmberChoice);
 window.visualViewport?.addEventListener('scroll',positionEmberChoice);
-const hub=createHub({root:document.querySelector('#hub'),assets:ASSETS,onMultiplayer:()=>openOnlineLobby(),onAccount:()=>openAccountScreen(),onSaveLocal:data=>{
+const hub=createHub({root:document.querySelector('#hub'),assets:ASSETS,onMultiplayer:()=>openOnlineLobby(),onAccount:()=>openAccountScreen(),onMapMenuDestination:openAuradonPage,onSaveLocal:data=>{
   if(!accounts?.hasSession())return;
   const username=accounts.getSession()?.account?.username;
   hub.setAccountStatus({username,state:'syncing',message:'Saving to your account…'});
@@ -847,6 +850,50 @@ const hub=createHub({root:document.querySelector('#hub'),assets:ASSETS,onMultipl
   document.querySelector('#resume-online').hidden=!multiplayer?.isActive();
   document.querySelector('#battle-mode').showModal();
 }});
+const auradonTeams = createAuradonTeams(duelDeviceStorage);
+const auradonTeamUi = createAuradonTeamUi({
+  root: document.querySelector('#auradon-team-view'), teams: auradonTeams,
+  onBack: returnToSeattle, onLibrary: () => openAuradonPage('menu/auradon-library'),
+});
+const auradonBattleUi = createAuradonBattleUi({
+  root: document.querySelector('#auradon-battle-view'), teams: auradonTeams,
+  onBack: returnToSeattle, onLibrary: () => openAuradonPage('menu/auradon-library'),
+});
+
+function returnToSeattle() {
+  leaveBattle('home');
+  document.querySelector('.wz-map-menu-trigger')?.focus({ preventScroll: true });
+}
+
+function openAuradonPage(screen) {
+  if (!['menu/dons', 'menu/auradon-library', 'menu/battle'].includes(screen)) return false;
+
+  cancelSpellPresentation();
+  battleScene.hide();
+  clearCombatTimers();
+  document.querySelectorAll('dialog[open]').forEach(dialog => dialog.close());
+  restoreLocalBattle();
+  hub.hide();
+  multiplayer?.hide();
+  accounts?.hide();
+  battleView.hidden = true;
+  if (location.hash !== `#${screen}`) history.pushState(null, '', `#${screen}`);
+
+  if (screen === 'menu/battle') {
+    auradonTeamUi.hide();
+    auradonBattleUi.show();
+  } else {
+    auradonBattleUi.hide();
+    auradonTeamUi.show(screen === 'menu/dons' ? 'team' : 'library');
+  }
+  return true;
+}
+
+function hideAuradonPages() {
+  auradonTeamUi.hide();
+  auradonBattleUi.hide();
+}
+
 if(duelStorage.getNotice())hub.setDeckNotice(duelStorage.getNotice());
 multiplayer=createMultiplayer({
   root:document.querySelector('#online-view'),getSavedDecks:bookId=>hub.getSavedDecks(bookId),getSelectedSpellbookId:()=>hub.getSelectedSpellbookId(),getProfile:()=>hub.getProfile(),
@@ -905,6 +952,7 @@ function discardOnlineIdentity(){
   }
 }
 function openAccountScreen(){
+  hideAuradonPages();
   cancelSpellPresentation();
   battleScene.hide();
   clearCombatTimers();
@@ -966,6 +1014,7 @@ async function sendOnlineAction(type,payload={}){
   }
 }
 function openOnlineLobby(){
+  hideAuradonPages();
   cancelSpellPresentation();
   battleScene.hide();
   clearCombatTimers();
@@ -987,6 +1036,7 @@ function openBattleChooser(element=hub.getProfile().element){
 }
 function enterBattle(){
   if(!isOnlineBattle()&&state.phase==='setup'){openBattleChooser();return;}
+  hideAuradonPages();
   if(!isOnlineBattle() && state.phase === 'initiative' && !localEntranceKey) localEntranceKey = `local-${++arenaSequence}`;
   hub.hide();multiplayer?.hide();accounts?.hide();battleView.hidden=false;
   lastBattleMode=battleMode;
@@ -995,6 +1045,7 @@ function enterBattle(){
   render();document.querySelector('#battle-home').focus({preventScroll:true});
 }
 function leaveBattle(screen='home',options={}){
+  hideAuradonPages();
   cancelSpellPresentation();
   battleScene.hide();
   clearCombatTimers();
@@ -1041,6 +1092,12 @@ document.querySelector('#restart').addEventListener('cancel',()=>{pendingBattleD
 document.querySelector('#restart').addEventListener('close',scheduleCombat);
 function syncAppRoute(){
   const screen=location.hash.slice(1);
+  if (screen === 'menu/online-battle') {
+    history.replaceState(null, '', '#menu/battle');
+    openAuradonPage('menu/battle');
+    return;
+  }
+  if (openAuradonPage(screen)) return;
   const storybookRoute=parseStorybookRoute(location.hash);
   if(storybookRoute){leaveBattle('storybook',{districtId:storybookRoute.districtId,history:false});return;}
   if(screen==='account'){openAccountScreen();return;}

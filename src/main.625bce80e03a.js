@@ -1,28 +1,31 @@
 import { getEnhancementBonus, createGame, rollInitiative, selectCard, castSelected, castFateSelected, skipFate, rollDice, resolveSpell, endTurn, beginRefresh, toggleRefreshCard, confirmRefresh, cancelRefresh, canCancelStagedAction, cancelStagedAction, getActingPlayerIndex, canSelectCard, canCastSelected, getEmberSpendRange, SPELL_RULES, HAND_LIMIT, OPENING_HAND_SIZE, activateEnhancement, rollEnhancement, canEnhance, MAX_ENHANCEMENT, ENHANCEMENT_THRESHOLD, activateAura, canActivateAura, AURA_COST, AURA_DURATION, AURA_BONUS } from './game.0d76f3dc0dbd.js';
-import { ASSETS, ASSET_CROPS, spellArtMarkup, spellSlabMarkup } from './assets.c357791527d6.js';
+import { ASSETS, ASSET_CROPS, spellArtMarkup, spellSlabMarkup } from './assets.1602afe6ba3f.js';
 import { SPELL_CATALOG } from './spells.869c60df6fda.js';
 import { validateDeck, getDeckValidation } from './decks.937e5d31de2c.js';
 import { MAX_HP, MAX_MANA, MAX_SHIELD, MAX_FLOW, MAX_EMBERS, isShieldBypassActive } from './effects.17b76112a157.js';
-import { createHub, isHubScreen } from './hub.3272fde021c6.js';
+import { createHub, isHubScreen } from './hub.2c6b41482c93.js';
 import { parseStorybookRoute } from './districts.41d180c8958a.js';
 import { createMultiplayer } from './multiplayer.be15f49ac9de.js';
 import { createAccounts } from './accounts.299a50537455.js';
-import { fitSlabText } from './slab-text.013375c642e9.js';
-import { createBattleScene } from './battle-scene.1bfa7f62ed12.js';
-import { createSpellAnimator } from './spell-animation.7693a6df442d.js';
-import { createAuraAnimator } from './aura-animation.9554971b087e.js';
-import { createMercifulAnimator } from './merciful-animation.269e70c0aa86.js';
+import { fitSlabText } from './slab-text.fa45fb312ee1.js';
+import { createBattleScene } from './battle-scene.89bb4f9aac0b.js';
+import { createSpellAnimator } from './spell-animation.5857353f2392.js';
+import { createAuraAnimator } from './aura-animation.326314b7f44b.js';
+import { createMercifulAnimator } from './merciful-animation.09ba8b1f3934.js';
 import { createManaAnimator } from './mana-animation.908383aa5689.js';
-import { createFateAnimator } from './fate-animation.ffe7e955be95.js';
-import { battlePileMarkup } from './battle-props.a570a6317481.js';
+import { createFateAnimator } from './fate-animation.c50a02cb1557.js';
+import { battlePileMarkup } from './battle-props.35d5ff6d4de3.js';
 import { getResolvedBattleVisuals } from './spell-visuals.b233f4cab94a.js';
 import { createHealthBars } from './health-bars.b204b645d6fa.js';
-import { pixelIconMarkup } from './pixel-icons.39e5a4ff60a9.js';
+import { pixelIconMarkup } from './pixel-icons.5bf835255384.js';
 import { ACTIVE_SPELLBOOK_ID, getDeckSpellbook, getSpellbook } from './spellbooks.20bd769300e2.js';
 import { getGameSpellbook } from './game.0d76f3dc0dbd.js';
 import { createDuelStorage } from './duel-storage.d5ce04c1a6a4.js';
 import { ELEMENTS, ELEMENT_INFO, getPlayerSchool } from './elements.f91c53cdab44.js';
 import { classifyBattleChoice } from './battle-choice.547da4f3b0c1.js';
+import { createAuradonTeams } from './auradon-teams.da6a6c4b3554.js';
+import { createAuradonTeamUi } from './auradon-team-ui.7a854dd44512.js';
+import { createAuradonBattleUi } from './auradon-battle-ui.da765d050ca5.js';
 
 let duelDeviceStorage = null;
 try { duelDeviceStorage = globalThis.localStorage; } catch {}
@@ -832,7 +835,7 @@ document.addEventListener('pointerdown',event=>{
 window.addEventListener('scroll',positionEmberChoice,true);
 window.visualViewport?.addEventListener('resize',positionEmberChoice);
 window.visualViewport?.addEventListener('scroll',positionEmberChoice);
-const hub=createHub({root:document.querySelector('#hub'),assets:ASSETS,onMultiplayer:()=>openOnlineLobby(),onAccount:()=>openAccountScreen(),onSaveLocal:data=>{
+const hub=createHub({root:document.querySelector('#hub'),assets:ASSETS,onMultiplayer:()=>openOnlineLobby(),onAccount:()=>openAccountScreen(),onMapMenuDestination:openAuradonPage,onSaveLocal:data=>{
   if(!accounts?.hasSession())return;
   const username=accounts.getSession()?.account?.username;
   hub.setAccountStatus({username,state:'syncing',message:'Saving to your account…'});
@@ -847,6 +850,50 @@ const hub=createHub({root:document.querySelector('#hub'),assets:ASSETS,onMultipl
   document.querySelector('#resume-online').hidden=!multiplayer?.isActive();
   document.querySelector('#battle-mode').showModal();
 }});
+const auradonTeams = createAuradonTeams(duelDeviceStorage);
+const auradonTeamUi = createAuradonTeamUi({
+  root: document.querySelector('#auradon-team-view'), teams: auradonTeams,
+  onBack: returnToSeattle, onLibrary: () => openAuradonPage('menu/auradon-library'),
+});
+const auradonBattleUi = createAuradonBattleUi({
+  root: document.querySelector('#auradon-battle-view'), teams: auradonTeams,
+  onBack: returnToSeattle, onLibrary: () => openAuradonPage('menu/auradon-library'),
+});
+
+function returnToSeattle() {
+  leaveBattle('home');
+  document.querySelector('.wz-map-menu-trigger')?.focus({ preventScroll: true });
+}
+
+function openAuradonPage(screen) {
+  if (!['menu/dons', 'menu/auradon-library', 'menu/battle'].includes(screen)) return false;
+
+  cancelSpellPresentation();
+  battleScene.hide();
+  clearCombatTimers();
+  document.querySelectorAll('dialog[open]').forEach(dialog => dialog.close());
+  restoreLocalBattle();
+  hub.hide();
+  multiplayer?.hide();
+  accounts?.hide();
+  battleView.hidden = true;
+  if (location.hash !== `#${screen}`) history.pushState(null, '', `#${screen}`);
+
+  if (screen === 'menu/battle') {
+    auradonTeamUi.hide();
+    auradonBattleUi.show();
+  } else {
+    auradonBattleUi.hide();
+    auradonTeamUi.show(screen === 'menu/dons' ? 'team' : 'library');
+  }
+  return true;
+}
+
+function hideAuradonPages() {
+  auradonTeamUi.hide();
+  auradonBattleUi.hide();
+}
+
 if(duelStorage.getNotice())hub.setDeckNotice(duelStorage.getNotice());
 multiplayer=createMultiplayer({
   root:document.querySelector('#online-view'),getSavedDecks:bookId=>hub.getSavedDecks(bookId),getSelectedSpellbookId:()=>hub.getSelectedSpellbookId(),getProfile:()=>hub.getProfile(),
@@ -905,6 +952,7 @@ function discardOnlineIdentity(){
   }
 }
 function openAccountScreen(){
+  hideAuradonPages();
   cancelSpellPresentation();
   battleScene.hide();
   clearCombatTimers();
@@ -966,6 +1014,7 @@ async function sendOnlineAction(type,payload={}){
   }
 }
 function openOnlineLobby(){
+  hideAuradonPages();
   cancelSpellPresentation();
   battleScene.hide();
   clearCombatTimers();
@@ -987,6 +1036,7 @@ function openBattleChooser(element=hub.getProfile().element){
 }
 function enterBattle(){
   if(!isOnlineBattle()&&state.phase==='setup'){openBattleChooser();return;}
+  hideAuradonPages();
   if(!isOnlineBattle() && state.phase === 'initiative' && !localEntranceKey) localEntranceKey = `local-${++arenaSequence}`;
   hub.hide();multiplayer?.hide();accounts?.hide();battleView.hidden=false;
   lastBattleMode=battleMode;
@@ -995,6 +1045,7 @@ function enterBattle(){
   render();document.querySelector('#battle-home').focus({preventScroll:true});
 }
 function leaveBattle(screen='home',options={}){
+  hideAuradonPages();
   cancelSpellPresentation();
   battleScene.hide();
   clearCombatTimers();
@@ -1041,6 +1092,12 @@ document.querySelector('#restart').addEventListener('cancel',()=>{pendingBattleD
 document.querySelector('#restart').addEventListener('close',scheduleCombat);
 function syncAppRoute(){
   const screen=location.hash.slice(1);
+  if (screen === 'menu/online-battle') {
+    history.replaceState(null, '', '#menu/battle');
+    openAuradonPage('menu/battle');
+    return;
+  }
+  if (openAuradonPage(screen)) return;
   const storybookRoute=parseStorybookRoute(location.hash);
   if(storybookRoute){leaveBattle('storybook',{districtId:storybookRoute.districtId,history:false});return;}
   if(screen==='account'){openAccountScreen();return;}

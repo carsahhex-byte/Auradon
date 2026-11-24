@@ -1,23 +1,23 @@
-import { ASSETS, ASSET_CROPS, MAP_UI_CROPS } from './assets.c357791527d6.js';
+import { ASSETS, ASSET_CROPS, MAP_UI_CROPS } from './assets.1602afe6ba3f.js';
 import { MAX_HP, MAX_MANA, MAX_SHIELD, MAX_FLOW, MAX_EMBERS } from './effects.17b76112a157.js';
 import { createStarterDeck, getBattleDeck, getDeckValidation, validateDeck, validateDeckSlot, normalizeDeckSlot } from './decks.937e5d31de2c.js';
 import { SPELLBOOK_1, SPELLBOOK_2, getDeckSpellbook, ACTIVE_SPELLBOOK_ID } from './spellbooks.20bd769300e2.js';
 import { createHubStorage, restoreHubDraft as restoreDraft } from './hub-storage.48f0ef05401f.js';
 import { ELEMENTS, ELEMENT_INFO } from './elements.f91c53cdab44.js';
 import { DISTRICTS, getDistrict, normalizeDistrictId } from './districts.41d180c8958a.js';
-import { roughScreenStone, roughWizardPortrait, roughPartyArt } from './hub-art.ab51d4536d5a.js';
-import { pixelIconMarkup } from './pixel-icons.39e5a4ff60a9.js';
-import { rolodexMarkup } from './rolodex.28ad8aaccf35.js';
+import { roughScreenStone, roughWizardPortrait, roughPartyArt } from './hub-art.6f5555e67cf9.js';
+import { pixelIconMarkup } from './pixel-icons.5bf835255384.js';
+import { rolodexMarkup } from './rolodex.91c54cf1faf4.js';
 
 const HUB_SCREENS = new Set(['title', 'home', 'character', 'friends', 'dons', 'storybook', 'battle-setup']);
 const MAP_MENU_TITLES = Object.freeze({
-  'menu/dons': 'Dons',
+  'menu/dons': 'Auradons',
   'menu/inventory': 'Inventory',
   'menu/storybook': 'Storybook',
   'menu/settings': 'Settings',
   'menu/friends': 'Friends',
   'menu/auradon-library': 'Auradon Library',
-  'menu/online-battle': 'Online battle',
+  'menu/battle': 'Battle',
 });
 
 export function isHubScreen(screen) {
@@ -78,7 +78,7 @@ function hubIcon(name, className = '') {
 }
 
 /** Mobile navigation, profile, and the Dons Rolodex. The battle host owns duel state. */
-export function createHub({ root, onBattle = () => {}, onMultiplayer = () => {}, onAccount = () => {}, onSaveLocal = () => {}, assets = {} }) {
+export function createHub({ root, onBattle = () => {}, onMultiplayer = () => {}, onAccount = () => {}, onSaveLocal = () => {}, onMapMenuDestination = () => false, assets = {} }) {
   if (!root) throw new Error('The Auradon hub needs a root element.');
   root.classList.add('wz-hub-root');
   root.hidden = true;
@@ -539,7 +539,7 @@ export function createHub({ root, onBattle = () => {}, onMultiplayer = () => {},
       case 'close-map-menu': closeMapMenu(); break;
       case 'map-menu-destination': {
         const route = button.dataset.wzDestination;
-        if (Object.hasOwn(MAP_MENU_TITLES, route)) show(route);
+        if (Object.hasOwn(MAP_MENU_TITLES, route) && !onMapMenuDestination(route)) show(route);
         break;
       }
       case 'select-aur': selectedAur = Number(button.dataset.wzAur); render(); break;

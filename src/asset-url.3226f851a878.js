@@ -1,4 +1,4 @@
-import { OPTIMIZED_ART } from './optimized-art.3d876db0366b.js';
+import { OPTIMIZED_ART } from './optimized-art.feb37033a273.js';
 
 const resolvedAssets = new Map();
 

@@ -1,4 +1,4 @@
-import { preloadAnimationSheet, createAnimationSprite, paintAnimationFrame, hideAnimationSprite } from './animation-sprites.4a524ddf1313.js';
+import { preloadAnimationSheet, createAnimationSprite, paintAnimationFrame, hideAnimationSprite } from './animation-sprites.ce01dbfbfc34.js';
 import { getPlayerSchool } from './elements.f91c53cdab44.js';
 
 export const MERCIFUL_STONE_SHEET = Object.freeze({

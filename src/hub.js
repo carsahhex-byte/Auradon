@@ -11,13 +11,13 @@ import { rolodexMarkup } from './rolodex.js';
 
 const HUB_SCREENS = new Set(['title', 'home', 'character', 'friends', 'dons', 'storybook', 'battle-setup']);
 const MAP_MENU_TITLES = Object.freeze({
-  'menu/dons': 'Dons',
+  'menu/dons': 'Auradons',
   'menu/inventory': 'Inventory',
   'menu/storybook': 'Storybook',
   'menu/settings': 'Settings',
   'menu/friends': 'Friends',
   'menu/auradon-library': 'Auradon Library',
-  'menu/online-battle': 'Online battle',
+  'menu/battle': 'Battle',
 });
 
 export function isHubScreen(screen) {
@@ -78,7 +78,7 @@ function hubIcon(name, className = '') {
 }
 
 /** Mobile navigation, profile, and the Dons Rolodex. The battle host owns duel state. */
-export function createHub({ root, onBattle = () => {}, onMultiplayer = () => {}, onAccount = () => {}, onSaveLocal = () => {}, assets = {} }) {
+export function createHub({ root, onBattle = () => {}, onMultiplayer = () => {}, onAccount = () => {}, onSaveLocal = () => {}, onMapMenuDestination = () => false, assets = {} }) {
   if (!root) throw new Error('The Auradon hub needs a root element.');
   root.classList.add('wz-hub-root');
   root.hidden = true;
@@ -539,7 +539,7 @@ export function createHub({ root, onBattle = () => {}, onMultiplayer = () => {},
       case 'close-map-menu': closeMapMenu(); break;
       case 'map-menu-destination': {
         const route = button.dataset.wzDestination;
-        if (Object.hasOwn(MAP_MENU_TITLES, route)) show(route);
+        if (Object.hasOwn(MAP_MENU_TITLES, route) && !onMapMenuDestination(route)) show(route);
         break;
       }
       case 'select-aur': selectedAur = Number(button.dataset.wzAur); render(); break;

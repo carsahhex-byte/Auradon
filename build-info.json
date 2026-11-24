@@ -1,6 +1,6 @@
 {
-  "id": "594f1c287ace",
-  "launch": "./auradon-594f1c287ace.html",
+  "id": "897cf06fb198",
+  "launch": "./auradon-897cf06fb198.html",
   "distribution": "game-only",
   "layout": "portrait-1024x1536",
   "screens": [
@@ -10,12 +10,15 @@
     "character",
     "friends",
     "dons",
+    "menu/dons",
+    "menu/auradon-library",
+    "menu/battle",
     "battle-setup",
     "online",
     "account",
     "battle"
   ],
-  "entry": "./src/main.71d06d9f9ed9.js",
+  "entry": "./src/main.625bce80e03a.js",
   "stylesheet": "./src/style.635dc128d77f.css",
   "stylesheets": [
     "./src/style.635dc128d77f.css",
@@ -23,6 +26,8 @@
     "./src/map-menu.592a5de439cb.css",
     "./src/rolodex.19b9fd6f1552.css",
     "./src/multiplayer.f69c286d5230.css",
-    "./src/accounts.3744f9ec8b40.css"
+    "./src/accounts.3744f9ec8b40.css",
+    "./src/auradon-team.15204fba708c.css",
+    "./src/auradon-battle.c1ad0cfd1fe9.css"
   ]
 }

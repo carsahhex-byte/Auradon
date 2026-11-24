@@ -19,6 +19,7 @@ export const ASSET_FILES = Object.freeze({
   aur4: 'Aur-4.png',
   aur5: 'Aur-5.png',
   aur6: 'Aur-6.png',
+  aur61: 'Aur-6.1.png',
   aur7: 'Aur-7.png',
   aur8: 'Aur-8.png',
   aur9: 'Aur-9.png',
