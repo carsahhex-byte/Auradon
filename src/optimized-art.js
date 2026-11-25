@@ -100,6 +100,181 @@ export const OPTIMIZED_ART = {
     "sourceSha256": "1b4ebeba8adfa6b42bc32bebe3aef55a711dbce453039fe0bf00d43017771903",
     "optimizedSha256": "750d67673839e83398c09c3c0532a6ed26075c42e0d8a5829b8c1c02b5139467"
   },
+  "auradonBattle1": {
+    "file": "auradonBattle1-1bed9ed8df02.webp",
+    "sourceSha256": "d7dc6aa0fe0ef9aec367da9abb414ad6dfe213a70db6baed8695543796bda1fa",
+    "optimizedSha256": "1bed9ed8df02d446926a905dcfc28c6381220025511047ab6d7597682b8b4419"
+  },
+  "auradonBattle2": {
+    "file": "auradonBattle2-400843f8c999.webp",
+    "sourceSha256": "f531fc88e27d0a7e67de89a7504e81edfae47312fde27dd02fbe6b4c83e8d49a",
+    "optimizedSha256": "400843f8c999f3b0264bd1c6aae132553c20f272cc6a167d0640ca6cc6e4efb4"
+  },
+  "auradonBattle3": {
+    "file": "auradonBattle3-7e48a99d7845.webp",
+    "sourceSha256": "74589a8a5d8d653eb60c554fafa3fb5fa0d7d14105f7b1b0c8049fe8ff4db36d",
+    "optimizedSha256": "7e48a99d784521e99cbd2b2a6b4efb582fcd0740965832453bedf7afe6b53462"
+  },
+  "auradonBattle4": {
+    "file": "auradonBattle4-f0c5153434df.webp",
+    "sourceSha256": "377a46d406f3f954818dbea9f9fabfad503b47f1bda59f9881bb453f81fe57e9",
+    "optimizedSha256": "f0c5153434df96355db152831fed3514a98453c6ff9b1724b04243b82d726649"
+  },
+  "auradonBattle5": {
+    "file": "auradonBattle5-064fb2600dee.webp",
+    "sourceSha256": "dfd640ecb1cd91b20a12e310a865880b302f83fe17b70ebb9a260652c0c21487",
+    "optimizedSha256": "064fb2600deed0ef1dece50c75d831f71ee513e77f7c551198fd0ed9525d3fac"
+  },
+  "auradonBattle6": {
+    "file": "auradonBattle6-c7812491717f.webp",
+    "sourceSha256": "69caf342f2166ba0b5281266d83356068d23b74fc582b6e43723439356d27f53",
+    "optimizedSha256": "c7812491717f033f85cd865404813c317b8060c1936b1bb230713437fff17d4f"
+  },
+  "auradonBattle7": {
+    "file": "auradonBattle7-3b1512575225.webp",
+    "sourceSha256": "4a5fdd90032a49be7a1cbb4ce4246dbe0f65b835a889b3f4cc3551ef225a1b78",
+    "optimizedSha256": "3b15125752259f2a08fb20a6a87f63ee3d770d029d71244280b1822ce7e4c543"
+  },
+  "auradonBattle8": {
+    "file": "auradonBattle8-bb22bd7a18a7.webp",
+    "sourceSha256": "2e0b946112fb079f3046fa20e8d10350a92782a387e8841d92a158d5d54ddabe",
+    "optimizedSha256": "bb22bd7a18a79f644a55c3bfc3f6b57a4fc802c0f08cad3dfc62eccdf864e892"
+  },
+  "auradonBattle9": {
+    "file": "auradonBattle9-aff051fe82e5.webp",
+    "sourceSha256": "3bd3d39a440c25665db1c3f22f135c977fa4a834fdfe6feabdf28786eaa7d20e",
+    "optimizedSha256": "aff051fe82e549856ea8999d774be167981e1eae7c928db4668173242baeefe4"
+  },
+  "auradonBattle10": {
+    "file": "auradonBattle10-260a0eb85db0.webp",
+    "sourceSha256": "9d6a983f3a724aeb049028b8968af182bd54af614d42312dfb79372e80d75681",
+    "optimizedSha256": "260a0eb85db059b1f547af80e04efe7159b2bf5e4a819c8fa6a78a973c390957"
+  },
+  "auradonBattle11": {
+    "file": "auradonBattle11-6d86983ac5e4.webp",
+    "sourceSha256": "0b7311642df1258f1727155530311690e0acf8647c40c3a799ac24fe1d927844",
+    "optimizedSha256": "6d86983ac5e45f8452de94c225d5bd8899ee59a6dd50d14d45895389da223f8a"
+  },
+  "auradonBattle61": {
+    "file": "auradonBattle61-90b744f57907.webp",
+    "sourceSha256": "2af40ccae6f8d950c69d1f2e1168c0f469f8186df717fec08c159b547ed4dc10",
+    "optimizedSha256": "90b744f57907f20626820b31437bf885364ca169ebe2c19bc7718f1ac3fa0b4d"
+  },
+  "auradonFlixerces": {
+    "file": "auradonFlixerces-c645f26b4cc8.webp",
+    "sourceSha256": "4493e2c02100e3138ea26585d59717dcf10c2c5c71156ca9e98a40980f8aaa65",
+    "optimizedSha256": "c645f26b4cc8875b2027d7835d0ec7446bb5af29576c5994fc0e2fd35178ec82"
+  },
+  "auradonSamuram": {
+    "file": "auradonSamuram-2c0cd68a34da.webp",
+    "sourceSha256": "2226bb38cf600459596b09d3b02cf29842a5dc9d334974dd602a6d47fd118ba0",
+    "optimizedSha256": "2c0cd68a34dac842d972e92619f3d45b619edadde526a0a61aac87dcc094b596"
+  },
+  "battleSeattle": {
+    "file": "battleSeattle-d811e63d518a.webp",
+    "sourceSha256": "2cdeb71505ddb4b752672ca8b7ebfd4a2f9c432ea902d9f54b4bea2fe499b4e0",
+    "optimizedSha256": "d811e63d518a69ba3c291a11cac15021c6cdc71837949520d8e908b776710c55"
+  },
+  "battleStatBox": {
+    "file": "battleStatBox-c70b940f9f11.webp",
+    "sourceSha256": "2ad33c6d05b5ba9315f74b4cb0af91f64c316989f8b83926d8dc309265b36cb9",
+    "optimizedSha256": "c70b940f9f110e00a649dbe1a55c377af45e4f0160ca4b0cbf681b1ebdf326b5"
+  },
+  "battleHpTrack": {
+    "file": "battleHpTrack-d9b2e79aebbc.webp",
+    "sourceSha256": "22e4111352a387f6866f5dfc7c7fc5ec2ac4786a9eddb640880d90e89840685d",
+    "optimizedSha256": "d9b2e79aebbcc2fd19fdb284de1da3d21b74c0874b9c4b353142f502e6b81e36"
+  },
+  "battleHpFill": {
+    "file": "battleHpFill-a9581538e26a.webp",
+    "sourceSha256": "fde51b23f7df43b8151cc2bbe0604467c2b5215c490e2c51abed30f4cbf190c2",
+    "optimizedSha256": "a9581538e26a2fb18109a8b79b00e7b38a06cae9f97300f6a0997e63c8d82e13"
+  },
+  "battleManaTrack": {
+    "file": "battleManaTrack-ef51c3dda557.webp",
+    "sourceSha256": "a585b216eb3b8e84a83fceaea602cc5e485a616ec9238003d29430214c88ad3d",
+    "optimizedSha256": "ef51c3dda55785ec7f7c575530cf60ebbffc01484e77e17b5164f82673bbec4d"
+  },
+  "battleManaFill": {
+    "file": "battleManaFill-07cb06fb2f0a.webp",
+    "sourceSha256": "fe9ce098d4510767ec379cfaed381c1700d4443f501bfb7a62bba1880a5c9554",
+    "optimizedSha256": "07cb06fb2f0af695fd5376ac60882d5c9ecc5ad7a86a60e7bdc0ba2b63135ac5"
+  },
+  "battleMovePanel": {
+    "file": "battleMovePanel-89a50940ee61.webp",
+    "sourceSha256": "85ae5323f063e6863ff03075c6464e8f1d16fbc7b887c6486a258cab3d1887e6",
+    "optimizedSha256": "89a50940ee6163d917bdeefb5ca55beca21d6a5e08a86c83de5e5310297f3659"
+  },
+  "battleMoveButton": {
+    "file": "battleMoveButton-e60de0d7bf02.webp",
+    "sourceSha256": "503254547f96bb3cc27cb1658c736ba3189526a05f46a81d6fa47a50ffafe447",
+    "optimizedSha256": "e60de0d7bf0252b3b3b011b3750ac6d991e0cd0291d53908702901e23a416eaf"
+  },
+  "battleFightButton": {
+    "file": "battleFightButton-025297d017c5.webp",
+    "sourceSha256": "5afb961fd32fa10fbb705d561db84dd7ba23a1aa2704393a5b256334df6b6107",
+    "optimizedSha256": "025297d017c5425f5c9f14a532a2d02c4aef35047da84809f62ee72ea9c32215"
+  },
+  "battleActionButton": {
+    "file": "battleActionButton-8bc86eedafbc.webp",
+    "sourceSha256": "824904c7915421243c17443b3f071e580b9657faf9f15b656927f2e12784b38a",
+    "optimizedSha256": "8bc86eedafbc2ebd2595cba7f181bc474382b1d1b32fbc5bc0774a1875e7c3f8"
+  },
+  "battleEscapeButton": {
+    "file": "battleEscapeButton-14558e19674c.webp",
+    "sourceSha256": "67370e0c8237da70f287f67552c7c005aeee92eca7f7df0af5cc1cb5368e127e",
+    "optimizedSha256": "14558e19674c0b3e2be5dd10dc14317ed10e956a36ec2950b31c49d6cf7220b0"
+  },
+  "battleSwords": {
+    "file": "battleSwords-c213cebf15f9.webp",
+    "sourceSha256": "55130c4f8bf2eaea29d254004c9d6923d60e8ec7025f1073b54c48ce15cbd572",
+    "optimizedSha256": "c213cebf15f9231bc5edad9697c8461b18beef97837413b9cbfb31d972561dee"
+  },
+  "battleIconInventory": {
+    "file": "battleIconInventory-fa263ced5a7d.webp",
+    "sourceSha256": "b1ce884cb4a34f2188282060bb85f6c5dfdb54127e2a6a0227f6a2c0c76078b8",
+    "optimizedSha256": "fa263ced5a7de05c8e060e14960bc3fbfffc6878ecb076d490a0e039d65eee2b"
+  },
+  "battleIconEscape": {
+    "file": "battleIconEscape-0087d4c63102.webp",
+    "sourceSha256": "97f06f08ddd9c1b22f10db7b53d8a2c776a47d81fc40495360178b2d46d7ed19",
+    "optimizedSha256": "0087d4c63102271fb9accff1f6e49cf4b2ecde0da5de42316f2031db6224b54e"
+  },
+  "battleIconAuradons": {
+    "file": "battleIconAuradons-411077e4b990.webp",
+    "sourceSha256": "8c53ffd31cb417941335a6d6fc06e62fa0deea01ca378963a1a8528fa9fb43f9",
+    "optimizedSha256": "411077e4b990a81acfe7a5161a1cb0e2264e75ea409f9fa70ae23365c5bcd45f"
+  },
+  "battleIconHp": {
+    "file": "battleIconHp-f1021820634d.webp",
+    "sourceSha256": "e1b3f707fcd058300ff660493cc3fa42de416586308fa3e0a77249a44095caa9",
+    "optimizedSha256": "f1021820634d44b09b9a827f2edcb5a0f2d7a393ef6777eaef0050bd95f05384"
+  },
+  "battleIconMana": {
+    "file": "battleIconMana-6b93f8bc327f.webp",
+    "sourceSha256": "233ceef4a6dfaddfbadbdd2b581a3b274223f1697cc4e4cbccc2fd27e96579d8",
+    "optimizedSha256": "6b93f8bc327f6809560d90177f85753a4f6873d824be12d5b543a8ab9418eec3"
+  },
+  "battleIconCinder": {
+    "file": "battleIconCinder-18b6cb55795f.webp",
+    "sourceSha256": "464ba8846a561168acf75dec5289403906238d16cdea7dca7b1e5d4680cf6049",
+    "optimizedSha256": "18b6cb55795faf1c535daad4b9d3bbc715b353b78113d9d04a78991178a40f20"
+  },
+  "battleIconBreath": {
+    "file": "battleIconBreath-de08912d663c.webp",
+    "sourceSha256": "945a68b97d59d2e8e77625337814bfe4107bafc3ca4359e15fc6518fc35063f5",
+    "optimizedSha256": "de08912d663c0564f10f2522fc80df357f84e0355fc1e349f961de51886d5893"
+  },
+  "battleIconPyroblast": {
+    "file": "battleIconPyroblast-3e45efc240fd.webp",
+    "sourceSha256": "16ed0df3a2f672902f49f7f97854590b9adf690f4860d8f8a6df9c2e22d7600e",
+    "optimizedSha256": "3e45efc240fd63faff38974b96fb293297bded76ffcb7e5dd5cf9c5d2e5dfdef"
+  },
+  "battleIconSunsetter": {
+    "file": "battleIconSunsetter-d99edeac2ef0.webp",
+    "sourceSha256": "01c0c066f9a2a4190e747964efe567c284ff8ae23340f806f3d782e0a63ea714",
+    "optimizedSha256": "d99edeac2ef014c3c6ed8be56b2ea18a99d52c93189df51b1ac028bc2644c24c"
+  },
   "fireSlabSheet": {
     "file": "fireSlabSheet-e353c368a94f.webp",
     "sourceSha256": "190e2c47f9ea679c9c4cab050c9f36310fba193b40f66db062ef98ff1e8ba4b4",
