@@ -54,7 +54,7 @@ The Rolodex is at `#dons`, the Friends screen at `#friends`, and the room lobby 
 
 In **Auradon Library**, add up to six Auradons to a team and save it with a name. You can save multiple teams and choose which one appears in **Auradons**. Open a team member to view its sprite, Stats and Moves. Use the type dropdowns in **Moves** to choose up to four moves for that member. Saved teams and move selections are stored on this device.
 
-In **Battle**, select a saved team for each player. Choosing a move resolves it immediately. To switch, open **Team**, select a reserve and confirm. A replacement after a knockout is free. Damage, mana costs and utility effects are playtest values. The Ice move list is pending, and Xineoph is reserved for later.
+In **Battle**, select a saved team for each player. The Seattle arena shows the first player close on the left and the second player farther away on the right. Choose **Fight** to open your four moves. Choosing a move resolves it immediately. All Auradon moves cost 0 mana during this playtest. To switch, open **Auradons**, select a reserve and confirm. A replacement after a knockout is free. **Escape** opens a confirmation before ending the match. The Ice move list is pending, and Xineoph is reserved for later.
 
 Each attack uses its move’s type against each defending type and multiplies the results. A weakness (2×) and a resistance (0.5×) cancel. An Ice/Wild Auradon takes 4× from Metal. Dragon and Cosmic each deal 2× damage to Void in this playtest. A single matchup that appears as both an outgoing strength and an incoming weakness counts once.
 
@@ -78,6 +78,8 @@ In the Rolodex, scroll the vertical list of thumbnails and choose any entry from
 | Aur-9 | Water | |
 | Aur-10 | Nature | |
 | Aur-11 | Dragon/Electric | |
+| Flixerces | Fire/Air | Provisional typing |
+| Samuram | Earth/Metal | Provisional typing |
 
 ### Wizard duels
 

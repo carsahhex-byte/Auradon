@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createAuradonBattle, applyAuradonMove, getAuradonMoveOptions, switchAuradon } from '../src/auradon-battle.js';
-import { getDamageMultiplier, getMove } from '../src/auradon-catalog.js';
+import { AURADON_MOVES, getDamageMultiplier, getMove } from '../src/auradon-catalog.js';
 
 function member(id, ...moveIds) {
   return { id, moveIds };
@@ -83,19 +83,28 @@ test('utility moves consume the turn and apply their effects for one qualifying 
   assert.deepEqual(boosted.sides[0].members[0].effects, []);
 });
 
-test('expensive-only loadouts can still attack after spending their mana', () => {
-  const initial = createAuradonBattle(
-    team('Fire', member('Aur-1', 'sunsetter')),
-    team('Water', member('Aur-6', 'wave')),
-  );
-  const drained = ['sunsetter', 'wave', 'sunsetter', 'wave'].reduce(use, initial);
-  const [move] = getAuradonMoveOptions(drained);
-  assert.equal(move.exhausted, true);
-  assert.equal(move.available, true);
-  assert.equal(move.cost, drained.sides[0].members[0].mana);
-  const finished = use(drained, move.id);
-  assert.equal(finished.phase, 'finished');
-  assert.equal(finished.sides[0].members[0].mana, 0);
+test('all damaging and utility moves can be used at zero mana', () => {
+  assert.equal(AURADON_MOVES.length, 41);
+  for (const move of AURADON_MOVES) {
+    const moveIds = move.utility ? [move.id, 'cinder'] : [move.id];
+    const initial = createAuradonBattle(
+      team('Fire', member('Aur-1', ...moveIds)),
+      team('Fire', member('Aur-1', 'cinder')),
+    );
+    initial.sides[0].members[0].mana = 0;
+
+    const [option] = getAuradonMoveOptions(initial);
+    assert.equal(move.mana, 0, move.name);
+    assert.equal(option.cost, 0, move.name);
+    assert.equal(option.available, true, move.name);
+    assert.equal(option.exhausted, false, move.name);
+
+    const result = use(initial, move.id);
+    assert.equal(result.turn, 1, move.name);
+    assert.equal(result.sides[0].members[0].mana, 0, move.name);
+    const expectedDamage = move.damage * getDamageMultiplier(move.type, ['Fire']);
+    assert.equal(result.sides[1].members[0].hp, 100 - expectedDamage, move.name);
+  }
 });
 
 test('a saved loadout can contain utility moves but needs a damaging move to start battle', () => {

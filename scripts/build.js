@@ -7,6 +7,10 @@ import { OPTIMIZED_ART } from '../src/optimized-art.js';
 const webOnly = process.argv.includes('--web');
 const gameOnly = process.argv.includes('--game-only');
 if (gameOnly && !webOnly) throw new Error('Use --web with --game-only for a production website release.');
+const pixelFontPath = 'public/art/auradon-tiny5.woff2';
+const pixelFontLicensePath = 'public/art/auradon-tiny5.OFL.txt';
+const pixelFont = await readFile(pixelFontPath);
+const pixelFontUrl = `../${pixelFontPath}`;
 // Dependencies precede their importers in both the hosted and standalone builds.
 const moduleNames = ['elements.js', 'optimized-art.js', 'spells.js', 'spellbooks.js', 'decks.js', 'effects.js', 'game.js', 'duel-storage.js', 'asset-url.js', 'pixel-icons.js', 'slab-text.js', 'assets.js', 'spell-visuals.js', 'animation-sprites.js', 'enhancement-animation.js', 'idle-sprites.js', 'battle-scene.js', 'custom-spell-sheets.js', 'revised-spell-sheets.js', 'revised-spell-animation.js', 'creature-animation.js', 'xineoph-animation.js', 'custom-spell-animation.js', 'spell-animation.js', 'aura-animation.js', 'mana-animation.js', 'merciful-animation.js', 'fate-animation.js', 'health-bars.js', 'hub-storage.js', 'districts.js', 'hub-art.js', 'rolodex.js', 'hub.js', 'backend.js', 'multiplayer.js', 'accounts.js', 'battle-props.js', 'battle-choice.js', 'auradon-catalog.js', 'auradon-teams.js', 'auradon-team-ui.js', 'auradon-battle.js', 'auradon-battle-ui.js', 'main.js'];
 const styleNames = ['style.css', 'hub.css', 'map-menu.css', 'rolodex.css', 'multiplayer.css', 'accounts.css', 'auradon-team.css', 'auradon-battle.css'];
@@ -14,6 +18,7 @@ for (const filename of moduleNames) execFileSync(process.execPath, ['--check', `
 await rm('dist', { recursive: true, force: true });
 await mkdir('dist');
 for (const file of ['index.html', 'src']) await cp(file, `dist/${file}`, { recursive: true });
+let hostedPixelFontUrl;
 if (webOnly) {
   // A hosted game loads separate cacheable images, without unused artwork or
   // a second copy embedded in a large downloadable HTML file.
@@ -32,6 +37,10 @@ if (webOnly) {
     await cp(assetPath, `dist/${assetPath}`);
   }
   await cp('public/art/favicon.svg', 'dist/public/art/favicon.svg');
+  const hostedPixelFontPath = pixelFontPath.replace('.woff2', `.${sha(pixelFont).slice(0, 12)}.woff2`);
+  await writeFile(`dist/${hostedPixelFontPath}`, pixelFont);
+  await cp(pixelFontLicensePath, `dist/${pixelFontLicensePath}`);
+  hostedPixelFontUrl = `../${hostedPixelFontPath}`;
 } else {
   await cp('public', 'dist/public', { recursive: true });
 }
@@ -63,7 +72,7 @@ if (webOnly) {
   }
   const stylesheets = [];
   for (const filename of styleNames) {
-    const css = await readFile(`src/${filename}`, 'utf8');
+    const css = (await readFile(`src/${filename}`, 'utf8')).replaceAll(pixelFontUrl, hostedPixelFontUrl);
     const cssHash = createHash('sha256').update(css).digest('hex').slice(0, 12);
     const outputName = filename.replace(/\.css$/, `.${cssHash}.css`);
     await writeFile(`dist/src/${outputName}`, css);
@@ -130,11 +139,14 @@ try {
 }
 const favicon = `data:image/svg+xml;base64,${(await readFile('public/art/favicon.svg')).toString('base64')}`;
 html = html.replace('./public/art/favicon.svg', favicon);
+const embeddedPixelFont = `data:font/woff2;base64,${pixelFont.toString('base64')}`;
 for (const filename of styleNames) {
-  const css = await readFile(`src/${filename}`, 'utf8');
+  const css = (await readFile(`src/${filename}`, 'utf8')).replaceAll(pixelFontUrl, embeddedPixelFont);
   html = html.replace(`<link rel="stylesheet" href="./src/${filename}" />`, () => `<style>${css}</style>`);
 }
 const safeScript = (source) => source.replace(/<\/script/gi, '<\\/script');
 html = html.replace(/<script\s+type="module"\s+src="\.\/src\/main\.js"><\/script>/, () => `<script>globalThis.AURADON_ASSET_URLS=${JSON.stringify(standaloneAssets)};</script>\n<script type="module">${safeScript(code)}</script>`);
+const fontLicense = safeScript(await readFile(pixelFontLicensePath, 'utf8'));
+html = html.replace('</body>', () => `<script type="text/plain" id="auradon-font-license">${fontLicense}</script>\n</body>`);
 await writeFile('dist/auradon.html', html);
 console.log('Built static site to dist/ and a standalone game at dist/auradon.html.');

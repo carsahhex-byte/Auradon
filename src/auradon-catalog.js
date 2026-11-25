@@ -6,34 +6,32 @@ export const AURADON_TYPES = Object.freeze([
 ]);
 
 export const AURADONS = Object.freeze([
-  ['Aur-1', 'aur1', ['Fire']],
-  ['Aur-2', 'aur2', ['Earth']],
-  ['Aur-3', 'aur3', ['Ice', 'Wild']],
-  ['Aur-4', 'aur4', ['Nature']],
-  ['Aur-5', 'aur5', ['Nature', 'Wild']],
-  ['Aur-6', 'aur6', ['Water']],
-  ['Aur-6.1', 'aur61', ['Water']],
-  ['Aur-7', 'aur7', ['Dragon', 'Air']],
-  ['Aur-8', 'aur8', ['Cosmic']],
-  ['Aur-9', 'aur9', ['Water']],
-  ['Aur-10', 'aur10', ['Nature']],
-  ['Aur-11', 'aur11', ['Dragon', 'Electric']],
-].map(([id, asset, types]) => Object.freeze({
+  ['Aur-1', 'aur1', 'auradonBattle1', ['Fire']],
+  ['Aur-2', 'aur2', 'auradonBattle2', ['Earth']],
+  ['Aur-3', 'aur3', 'auradonBattle3', ['Ice', 'Wild']],
+  ['Aur-4', 'aur4', 'auradonBattle4', ['Nature']],
+  ['Aur-5', 'aur5', 'auradonBattle5', ['Nature', 'Wild']],
+  ['Aur-6', 'aur6', 'auradonBattle6', ['Water']],
+  ['Aur-6.1', 'aur61', 'auradonBattle61', ['Water']],
+  ['Aur-7', 'aur7', 'auradonBattle7', ['Dragon', 'Air']],
+  ['Aur-8', 'aur8', 'auradonBattle8', ['Cosmic']],
+  ['Aur-9', 'aur9', 'auradonBattle9', ['Water']],
+  ['Aur-10', 'aur10', 'auradonBattle10', ['Nature']],
+  ['Aur-11', 'aur11', 'auradonBattle11', ['Dragon', 'Electric']],
+  ['Flixerces', 'auradonFlixerces', 'auradonFlixerces', ['Fire', 'Air']],
+  ['Samuram', 'auradonSamuram', 'auradonSamuram', ['Earth', 'Metal']],
+].map(([id, portraitAsset, battleAsset, types]) => Object.freeze({
   id,
   name: id,
-  sprite: ASSETS[asset],
+  sprite: ASSETS[portraitAsset],
+  battleSprite: ASSETS[battleAsset],
   types: Object.freeze(types),
   maxHp: 100,
   maxMana: 10,
 })));
 
-// Damage and mana are playtest values. Array order is the permanent power rank.
-const rankStats = [
-  { damage: 12, mana: 0 },
-  { damage: 20, mana: 2 },
-  { damage: 30, mana: 4 },
-  { damage: 44, mana: 6 },
-];
+// Damage is a playtest value. Array order is the permanent power rank.
+const rankDamage = [12, 20, 30, 44];
 
 const rankedMoves = {
   Fire: [
@@ -101,25 +99,25 @@ const rankedMoves = {
 
 const utilityMoves = {
   Earth: {
-    id: 'merciful', name: 'Merciful', utility: 'guard', mana: 2,
+    id: 'merciful', name: 'Merciful', utility: 'guard',
     description: 'Halves the damage of the next hit this Auradon takes.',
   },
   Wild: {
-    id: 'sharpness-5', name: 'Sharpness 5', utility: 'boost', mana: 2,
+    id: 'sharpness-5', name: 'Sharpness 5', utility: 'boost',
     description: 'Boosts this Auradon’s next damaging move by 50%.',
   },
   Metal: {
-    id: 'weaponize', name: 'Weaponize', utility: 'weaponize', mana: 4,
+    id: 'weaponize', name: 'Weaponize', utility: 'weaponize',
     description: 'Boosts the next damaging move by 50% and halves the damage of the next hit taken.',
   },
 };
 
 export const AURADON_MOVES = Object.freeze(AURADON_TYPES.flatMap(type => {
   const moves = (rankedMoves[type] ?? []).map(([id, name], index) => Object.freeze({
-    id, name, type, rank: index + 1, ...rankStats[index], utility: null,
+    id, name, type, rank: index + 1, damage: rankDamage[index], mana: 0, utility: null,
   }));
   const utility = utilityMoves[type];
-  if (utility) moves.push(Object.freeze({ ...utility, type, rank: null, damage: 0 }));
+  if (utility) moves.push(Object.freeze({ ...utility, type, rank: null, damage: 0, mana: 0 }));
   return moves;
 }));
 
