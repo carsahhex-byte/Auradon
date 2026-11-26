@@ -32,6 +32,58 @@ function battleMeter(label, current, maximum) {
   </div>`;
 }
 
+function playBattleReaction(board, side, kind, member) {
+  const view = board?.ownerDocument.defaultView;
+  if (!view || view.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return null;
+
+  const combatant = board.querySelector(`.auradon-battle-combatant[data-side="${side}"]`);
+  const sprite = combatant?.querySelector('img');
+  if (!sprite?.animate) return null;
+
+  const tint = board.ownerDocument.createElement('span');
+  tint.className = 'auradon-battle-reaction';
+  tint.dataset.battleReaction = kind;
+  tint.setAttribute('aria-hidden', 'true');
+  tint.style.setProperty('--battle-reaction-sprite', `url(${JSON.stringify(sprite.src)})`);
+  combatant.append(tint);
+
+  const flash = tint.animate([
+    { opacity: 0 },
+    { opacity: 0.55, offset: 0.15 },
+    { opacity: 0.08, offset: 0.44 },
+    { opacity: 0.55, offset: 0.61 },
+    { opacity: 0 },
+  ], { duration: 1000, easing: 'ease-in-out' });
+  let drain;
+  let cancelled = false;
+  const finished = flash.finished.then(() => {
+    tint.remove();
+    if (cancelled || kind !== 'hit') return;
+
+    const meter = board.querySelector(`.auradon-battle-stats:nth-child(${side + 1}) .is-hp`);
+    const fill = meter.querySelector('.auradon-battle-meter-track > span');
+    const previousClip = view.getComputedStyle(fill).clipPath;
+    const remaining = member.hp / member.maxHp * 100;
+    meter.setAttribute('aria-valuenow', String(member.hp));
+    meter.querySelector('.auradon-battle-meter-value').textContent = `${member.hp}/${member.maxHp}`;
+    fill.style.setProperty('--fill', `${remaining}%`);
+    drain = fill.animate([
+      { clipPath: previousClip }, { clipPath: `inset(0 ${100 - remaining}% 0 0)` },
+    ], { duration: 420, easing: 'ease-in-out' });
+    return drain.finished;
+  });
+
+  return {
+    finished,
+    cancel() {
+      cancelled = true;
+      flash.cancel();
+      drain?.cancel();
+      tint.remove();
+    },
+  };
+}
+
 function battleStats(member, side, active) {
   const name = escapeBattleText(member.name);
   return `<section class="auradon-battle-stats${active ? ' is-active' : ''}" aria-label="Player ${side + 1} ${name} stats">
@@ -270,7 +322,26 @@ export function createAuradonBattleUi({ root, teams, onBack, onLibrary }) {
       activeMoveEffect = null;
       render(heading);
     };
-    void effect.finished.then(showResult, showResult);
+    const react = () => {
+      if (activeMoveEffect !== effect) return;
+      const side = result.reaction === 'buff' ? casterIndex : 1 - casterIndex;
+      const { members, activeIndex } = match.sides[side];
+      let reaction;
+      try {
+        reaction = playBattleReaction(board, side, result.reaction, members[activeIndex]);
+      } catch {
+        showResult();
+        return;
+      }
+      if (!reaction) {
+        showResult();
+        return;
+      }
+      effect = reaction;
+      activeMoveEffect = reaction;
+      void reaction.finished.then(showResult, showResult);
+    };
+    void effect.finished.then(react, react);
   }
 
   window.addEventListener('resize', fitBoard);

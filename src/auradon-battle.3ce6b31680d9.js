@@ -136,7 +136,7 @@ export function applyAuradonMove(state, moveId) {
   const active = activeMember(state);
   const attacker = { ...active, mana: active.mana - move.cost };
   const next = move.utility ? resolveUtility(state, attacker, move) : resolveDamage(state, attacker, move);
-  return { state: next, error: null };
+  return { state: next, error: null, reaction: move.utility ? 'buff' : 'hit' };
 }
 
 export function switchAuradon(state, index) {
