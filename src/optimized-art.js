@@ -101,14 +101,14 @@ export const OPTIMIZED_ART = {
     "optimizedSha256": "750d67673839e83398c09c3c0532a6ed26075c42e0d8a5829b8c1c02b5139467"
   },
   "auradonBattle1": {
-    "file": "auradonBattle1-1bed9ed8df02.webp",
-    "sourceSha256": "d7dc6aa0fe0ef9aec367da9abb414ad6dfe213a70db6baed8695543796bda1fa",
-    "optimizedSha256": "1bed9ed8df02d446926a905dcfc28c6381220025511047ab6d7597682b8b4419"
+    "file": "auradonBattle1-3d5fb5bf3fe2.webp",
+    "sourceSha256": "bc586fb58b5843d4dbd20382f9976ba04bb1ee87af61325e49f00dd691268ef0",
+    "optimizedSha256": "3d5fb5bf3fe2f0f288f3fd48ab2e52d1a8a4c4a11369b318e85c37a20ede6895"
   },
   "auradonBattle2": {
-    "file": "auradonBattle2-400843f8c999.webp",
-    "sourceSha256": "f531fc88e27d0a7e67de89a7504e81edfae47312fde27dd02fbe6b4c83e8d49a",
-    "optimizedSha256": "400843f8c999f3b0264bd1c6aae132553c20f272cc6a167d0640ca6cc6e4efb4"
+    "file": "auradonBattle2-9470bb5c80ad.webp",
+    "sourceSha256": "bd78517b1d7c14d9fe3b46d0b511c3b280953d15f3f6a4da61f0ca2cf6c7a44c",
+    "optimizedSha256": "9470bb5c80ad0eb2ad2474e26069cd46e92cfefa1e3ce85ba29b278e29fb921f"
   },
   "auradonBattle3": {
     "file": "auradonBattle3-7e48a99d7845.webp",
@@ -126,9 +126,9 @@ export const OPTIMIZED_ART = {
     "optimizedSha256": "064fb2600deed0ef1dece50c75d831f71ee513e77f7c551198fd0ed9525d3fac"
   },
   "auradonBattle6": {
-    "file": "auradonBattle6-c7812491717f.webp",
-    "sourceSha256": "69caf342f2166ba0b5281266d83356068d23b74fc582b6e43723439356d27f53",
-    "optimizedSha256": "c7812491717f033f85cd865404813c317b8060c1936b1bb230713437fff17d4f"
+    "file": "auradonBattle6-47bf08fdba77.webp",
+    "sourceSha256": "7b6990a117c1fc178490a6ccdae13a4bcdfd077575dd9a51ed2a0799c7225fba",
+    "optimizedSha256": "47bf08fdba7718064815432b5b97aef94dee03da36c36d019aabe0872c170426"
   },
   "auradonBattle7": {
     "file": "auradonBattle7-3b1512575225.webp",
@@ -136,9 +136,9 @@ export const OPTIMIZED_ART = {
     "optimizedSha256": "3b15125752259f2a08fb20a6a87f63ee3d770d029d71244280b1822ce7e4c543"
   },
   "auradonBattle8": {
-    "file": "auradonBattle8-bb22bd7a18a7.webp",
-    "sourceSha256": "2e0b946112fb079f3046fa20e8d10350a92782a387e8841d92a158d5d54ddabe",
-    "optimizedSha256": "bb22bd7a18a79f644a55c3bfc3f6b57a4fc802c0f08cad3dfc62eccdf864e892"
+    "file": "auradonBattle8-6bc9b7a3ba73.webp",
+    "sourceSha256": "7dee154953ac7ec5087301e69019e92f8f382750b3a9260c413f3e1317a7b81c",
+    "optimizedSha256": "6bc9b7a3ba73be65dbb9c6a2d41f7fe46ed55d5ef7e3b5bb9f03cad687460f1f"
   },
   "auradonBattle9": {
     "file": "auradonBattle9-aff051fe82e5.webp",
@@ -156,19 +156,19 @@ export const OPTIMIZED_ART = {
     "optimizedSha256": "6d86983ac5e45f8452de94c225d5bd8899ee59a6dd50d14d45895389da223f8a"
   },
   "auradonBattle61": {
-    "file": "auradonBattle61-90b744f57907.webp",
-    "sourceSha256": "2af40ccae6f8d950c69d1f2e1168c0f469f8186df717fec08c159b547ed4dc10",
-    "optimizedSha256": "90b744f57907f20626820b31437bf885364ca169ebe2c19bc7718f1ac3fa0b4d"
+    "file": "auradonBattle61-86ca6c473c5f.webp",
+    "sourceSha256": "94522da59b76ec58f2fdc8ee975a3f3eff2bd3d2fa2b2b9a4b85cca857d64054",
+    "optimizedSha256": "86ca6c473c5fe3e38fa9151d9852eea3582348a6bd5c396ce9ea65b17bd3fab1"
   },
   "auradonFlixerces": {
-    "file": "auradonFlixerces-c645f26b4cc8.webp",
-    "sourceSha256": "4493e2c02100e3138ea26585d59717dcf10c2c5c71156ca9e98a40980f8aaa65",
-    "optimizedSha256": "c645f26b4cc8875b2027d7835d0ec7446bb5af29576c5994fc0e2fd35178ec82"
+    "file": "auradonFlixerces-6b147063920c.webp",
+    "sourceSha256": "698686f1c97ffe5defd80059f02a0be1a5bcfa33d5d24eed9f31ca021b0a6927",
+    "optimizedSha256": "6b147063920caf3a8786c113ee94e4e581f2b610999d745ab8e7470a55031996"
   },
   "auradonSamuram": {
-    "file": "auradonSamuram-2c0cd68a34da.webp",
-    "sourceSha256": "2226bb38cf600459596b09d3b02cf29842a5dc9d334974dd602a6d47fd118ba0",
-    "optimizedSha256": "2c0cd68a34dac842d972e92619f3d45b619edadde526a0a61aac87dcc094b596"
+    "file": "auradonSamuram-d991f60aa0c7.webp",
+    "sourceSha256": "9fd09d089c1a31ada01cbe53e4108ce86f104f54c8980e46ac415a0d9155a417",
+    "optimizedSha256": "d991f60aa0c7e65156262fec18ff7a735363280785e32b0d60564fd787d4e992"
   },
   "battleSeattle": {
     "file": "battleSeattle-d811e63d518a.webp",

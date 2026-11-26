@@ -1,4 +1,4 @@
-import { ASSETS } from './assets.528a56f26ae4.js';
+import { ASSETS } from './assets.ade5b847b81c.js';
 
 const escapeArt = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const screenAssets = { deck:'roughDeckScreen', character:'roughCharacterScreen', friends:'roughFriendsScreen', battle:'roughBattleScreen' };

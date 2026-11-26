@@ -1,4 +1,4 @@
-import { getAuradon, getDamageMultiplier, getMove } from './auradon-catalog.9243f67ac43a.js';
+import { getAuradon, getDamageMultiplier, getMove } from './auradon-catalog.f2b990f50d7c.js';
 
 const TURN_MANA = 2;
 const GUARD = Object.freeze({ id: 'guard', name: 'Guard' });

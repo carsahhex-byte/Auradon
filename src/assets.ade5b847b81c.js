@@ -1,8 +1,8 @@
 /** Original uploaded artwork. Crop metadata only hides transparent export margins. */
-import { resolveAssetUrl } from './asset-url.ea9d5ed1ed81.js';
+import { resolveAssetUrl } from './asset-url.a3512cc5cad5.js';
 import { SPELL_CATALOG } from './spells.869c60df6fda.js';
-import { COMPACT_SPELL_TEXT, slabRulesMarkup } from './slab-text.5ae2f8640900.js';
-import { PIXEL_ICON_FILE, PIXEL_ICON_CROPS } from './pixel-icons.4d0186b362fc.js';
+import { COMPACT_SPELL_TEXT, slabRulesMarkup } from './slab-text.c32320578403.js';
+import { PIXEL_ICON_FILE, PIXEL_ICON_CROPS } from './pixel-icons.5b791d388b81.js';
 
 export const ASSET_FILES = Object.freeze({
   titleScene: 'Wizzy Seattle Title.png',

@@ -1,6 +1,6 @@
-import { GOLEM_ANIMATION_SHEETS } from './assets.528a56f26ae4.js';
+import { GOLEM_ANIMATION_SHEETS } from './assets.ade5b847b81c.js';
 import { getCustomSpellSheet } from './custom-spell-sheets.41eeef9da694.js';
-import { createAnimationSprite, paintAnimationFrame, hideAnimationSprite } from './animation-sprites.40b8f900691c.js';
+import { createAnimationSprite, paintAnimationFrame, hideAnimationSprite } from './animation-sprites.fdf818cd6b6d.js';
 import { createEnhancementFlourish } from './enhancement-animation.1647c044ed1d.js';
 import { REVISED_SPELL_SHEETS } from './revised-spell-sheets.d2d231945d87.js';
 

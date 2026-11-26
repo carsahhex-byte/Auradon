@@ -1,4 +1,4 @@
-import { ASSETS } from './assets.528a56f26ae4.js';
+import { getAuradon } from './auradon-catalog.f2b990f50d7c.js';
 
 const spriteDescriptions = [
   'Red bird with a swept crest and layered feathers',
@@ -14,12 +14,11 @@ const spriteDescriptions = [
   'Golden dragon with two large wings',
 ];
 
-const sprites = spriteDescriptions.map((description, index) => ({
-  number: index + 1,
-  name: `Aur-${index + 1}`,
-  url: ASSETS[`aur${index + 1}`],
-  description,
-}));
+const sprites = spriteDescriptions.map((description, index) => {
+  const number = index + 1;
+  const { name, sprite: url } = getAuradon(`Aur-${number}`);
+  return { number, name, url, description };
+});
 
 export function rolodexMarkup(selected = 1) {
   const sprite = sprites[selected - 1] || sprites[0];

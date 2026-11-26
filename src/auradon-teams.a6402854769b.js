@@ -1,4 +1,4 @@
-import { defaultMoveIds, getAuradon, getMove } from './auradon-catalog.9243f67ac43a.js';
+import { defaultMoveIds, getAuradon, getMove } from './auradon-catalog.f2b990f50d7c.js';
 
 export const AURADON_TEAMS_SAVE_KEY = 'auradon.teams.v1';
 export const MAX_AURADON_TEAM_SIZE = 6;

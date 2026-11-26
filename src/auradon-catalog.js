@@ -6,15 +6,15 @@ export const AURADON_TYPES = Object.freeze([
 ]);
 
 export const AURADONS = Object.freeze([
-  ['Aur-1', 'aur1', 'auradonBattle1', ['Fire']],
-  ['Aur-2', 'aur2', 'auradonBattle2', ['Earth']],
+  ['Aur-1', 'auradonBattle1', 'auradonBattle1', ['Fire']],
+  ['Aur-2', 'auradonBattle2', 'auradonBattle2', ['Earth']],
   ['Aur-3', 'aur3', 'auradonBattle3', ['Ice', 'Wild']],
   ['Aur-4', 'aur4', 'auradonBattle4', ['Nature']],
   ['Aur-5', 'aur5', 'auradonBattle5', ['Nature', 'Wild']],
-  ['Aur-6', 'aur6', 'auradonBattle6', ['Water']],
-  ['Aur-6.1', 'aur61', 'auradonBattle61', ['Water']],
+  ['Aur-6', 'auradonBattle6', 'auradonBattle6', ['Water']],
+  ['Aur-6.1', 'auradonBattle61', 'auradonBattle61', ['Water']],
   ['Aur-7', 'aur7', 'auradonBattle7', ['Dragon', 'Air']],
-  ['Aur-8', 'aur8', 'auradonBattle8', ['Cosmic']],
+  ['Aur-8', 'auradonBattle8', 'auradonBattle8', ['Cosmic']],
   ['Aur-9', 'aur9', 'auradonBattle9', ['Water']],
   ['Aur-10', 'aur10', 'auradonBattle10', ['Nature']],
   ['Aur-11', 'aur11', 'auradonBattle11', ['Dragon', 'Electric']],

@@ -1,6 +1,6 @@
 {
-  "id": "e177ec83e798",
-  "launch": "./auradon-e177ec83e798.html",
+  "id": "c39eae229a8d",
+  "launch": "./auradon-c39eae229a8d.html",
   "distribution": "game-only",
   "layout": "portrait-1024x1536",
   "screens": [
@@ -18,7 +18,7 @@
     "account",
     "battle"
   ],
-  "entry": "./src/main.806adf5a4947.js",
+  "entry": "./src/main.f0def2f58919.js",
   "stylesheet": "./src/style.635dc128d77f.css",
   "stylesheets": [
     "./src/style.635dc128d77f.css",

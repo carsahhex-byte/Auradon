@@ -1,5 +1,5 @@
-import { AURADONS, AURADON_MOVES, AURADON_TYPES, defaultMoveIds, getAuradon, getDamageMultiplier } from './auradon-catalog.9243f67ac43a.js';
-import { MAX_AURADON_MOVES, MAX_AURADON_TEAM_NAME, MAX_AURADON_TEAM_SIZE } from './auradon-teams.b159e6624e8b.js';
+import { AURADONS, AURADON_MOVES, AURADON_TYPES, defaultMoveIds, getAuradon, getDamageMultiplier } from './auradon-catalog.f2b990f50d7c.js';
+import { MAX_AURADON_MOVES, MAX_AURADON_TEAM_NAME, MAX_AURADON_TEAM_SIZE } from './auradon-teams.a6402854769b.js';
 
 function escapeHtml(value) {
   return String(value).replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character]);
