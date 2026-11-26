@@ -324,6 +324,7 @@
 .auradon-battle-options img { width: 24px; height: 24px; }
 .auradon-battle-board button:hover:not(:disabled) { filter: brightness(1.12); }
 .auradon-battle-board button:focus-visible { outline: 3px solid #ffe4b2; outline-offset: -5px; }
+.auradon-battle-board[aria-busy='true'], .auradon-battle-board[aria-busy='true'] button { cursor: progress; }
 .auradon-battle-board [hidden] { display: none; }
 
 .auradon-battle-switch { padding: clamp(14px, 4vw, 26px); }

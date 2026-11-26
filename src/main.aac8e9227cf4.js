@@ -25,7 +25,7 @@ import { ELEMENTS, ELEMENT_INFO, getPlayerSchool } from './elements.f91c53cdab44
 import { classifyBattleChoice } from './battle-choice.547da4f3b0c1.js';
 import { createAuradonTeams } from './auradon-teams.b159e6624e8b.js';
 import { createAuradonTeamUi } from './auradon-team-ui.ffc70f3604a0.js';
-import { createAuradonBattleUi } from './auradon-battle-ui.ee886ebf466d.js';
+import { createAuradonBattleUi } from './auradon-battle-ui.af5098a7da90.js';
 
 let duelDeviceStorage = null;
 try { duelDeviceStorage = globalThis.localStorage; } catch {}

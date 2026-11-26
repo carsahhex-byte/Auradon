@@ -1,5 +1,6 @@
 import { ASSETS } from './assets.js';
 import { applyAuradonMove, createAuradonBattle, getAuradonMoveOptions, switchAuradon } from './auradon-battle.js';
+import { playAuradonMoveEffect } from './auradon-move-animation.js';
 
 const escapeBattleText = value => String(value).replace(/[&<>"']/g, character => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
@@ -174,6 +175,7 @@ export function createAuradonBattleUi({ root, teams, onBack, onLibrary }) {
   let selection = [];
   let pendingIndex = null;
   let movesOpen = false;
+  let activeMoveEffect = null;
   let error = '';
 
   function fitBoard() {
@@ -231,6 +233,46 @@ export function createAuradonBattleUi({ root, teams, onBack, onLibrary }) {
     render(match ? heading : '[data-don-battle="start"]');
   }
 
+  function cancelMoveEffect() {
+    const effect = activeMoveEffect;
+    activeMoveEffect = null;
+    root.querySelector('.auradon-battle-board')?.removeAttribute('aria-busy');
+    effect?.cancel();
+  }
+
+  function useMove(moveId) {
+    const casterIndex = match.turn;
+    const result = applyAuradonMove(match, moveId);
+    match = result.state;
+    error = result.error ?? '';
+    if (error) {
+      render(heading);
+      return;
+    }
+
+    // The engine has resolved the turn. Leave its previous board in place while the effect plays.
+    movesOpen = false;
+    const board = root.querySelector('.auradon-battle-board');
+    const arena = board?.querySelector('.auradon-battle-arena');
+    let effect;
+    try {
+      effect = playAuradonMoveEffect({ arena, moveId, casterIndex });
+    } catch {
+      render(heading);
+      return;
+    }
+
+    activeMoveEffect = effect;
+    board?.setAttribute('aria-busy', 'true');
+    board?.querySelectorAll('button:not(:disabled)').forEach(button => { button.disabled = true; });
+    const showResult = () => {
+      if (activeMoveEffect !== effect) return;
+      activeMoveEffect = null;
+      render(heading);
+    };
+    void effect.finished.then(showResult, showResult);
+  }
+
   window.addEventListener('resize', fitBoard);
   window.visualViewport?.addEventListener('resize', fitBoard);
 
@@ -244,13 +286,9 @@ export function createAuradonBattleUi({ root, teams, onBack, onLibrary }) {
 
   root.addEventListener('click', event => {
     const button = event.target.closest('button');
-    if (!button || button.disabled) return;
+    if (!button || button.disabled || activeMoveEffect || root.hidden) return;
     if (button.dataset.donMove) {
-      const result = applyAuradonMove(match, button.dataset.donMove);
-      match = result.state;
-      error = result.error ?? '';
-      if (!error) movesOpen = false;
-      render(heading);
+      useMove(button.dataset.donMove);
     } else if (button.dataset.donBench !== undefined) {
       pendingIndex = Number(button.dataset.donBench);
       openSwitch({ focusIndex: pendingIndex });
@@ -301,10 +339,12 @@ export function createAuradonBattleUi({ root, teams, onBack, onLibrary }) {
 
   return {
     show() {
+      cancelMoveEffect();
       root.hidden = false;
       render(heading);
     },
     hide() {
+      cancelMoveEffect();
       closeBattleDialog();
       root.hidden = true;
     },

@@ -1,6 +1,6 @@
 {
-  "id": "0b9bb95dcc79",
-  "launch": "./auradon-0b9bb95dcc79.html",
+  "id": "4c1ba5533a8b",
+  "launch": "./auradon-4c1ba5533a8b.html",
   "distribution": "game-only",
   "layout": "portrait-1024x1536",
   "screens": [
@@ -18,7 +18,7 @@
     "account",
     "battle"
   ],
-  "entry": "./src/main.ff76939825af.js",
+  "entry": "./src/main.aac8e9227cf4.js",
   "stylesheet": "./src/style.635dc128d77f.css",
   "stylesheets": [
     "./src/style.635dc128d77f.css",
@@ -28,6 +28,6 @@
     "./src/multiplayer.f69c286d5230.css",
     "./src/accounts.3744f9ec8b40.css",
     "./src/auradon-team.15204fba708c.css",
-    "./src/auradon-battle.d274217f75b2.css"
+    "./src/auradon-battle.a0fbac761b4c.css"
   ]
 }
